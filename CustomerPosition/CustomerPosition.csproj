@@ -151,6 +151,13 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="map_o.aspx.cs">
+      <DependentUpon>map_o.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="map_o.aspx.designer.cs">
+      <DependentUpon>map_o.aspx</DependentUpon>
+    </Compile>
     <Compile Include="map.aspx.cs">
       <DependentUpon>map.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -235,6 +242,7 @@
     <Content Include="img\Epicentrk.svg.png" />
     <Content Include="img\logo-big-epicenter.png" />
     <Content Include="js\map_o.js" />
+    <Content Include="map_o.aspx" />
     <Content Include="WebForm1.aspx" />
     <Content Include="WebForm2.aspx" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
