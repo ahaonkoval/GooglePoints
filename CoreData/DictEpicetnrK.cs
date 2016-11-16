@@ -146,6 +146,7 @@ namespace CoreData
                             ,[name]
                             ,[poligon].EnvelopeCenter().Long as lat
                             ,[poligon].EnvelopeCenter().Lat  as lng
+                            ,is_centre_region
                         FROM [dbo].[dict_districts] where [region_id] = {0}
                 ";
             cmd_text = string.Format(cmd_text, id.ToString());
@@ -168,7 +169,8 @@ namespace CoreData
                         region_id = Convert.ToInt32(reader[2]),
                         name = reader[3].ToString(),
                         lat = Convert.ToDecimal(reader[4]),
-                        lng = Convert.ToDecimal(reader[5])
+                        lng = Convert.ToDecimal(reader[5]),
+                        is_region_center = Convert.ToBoolean(reader[6])
                     });
                 }
                 connection.Close();
@@ -365,7 +367,10 @@ namespace CoreData
                     declare
                         @visited            int                    
 
-                    select top 1 @potamus_market_id = potamus_market_id from [dbo].[google_market_coordinates] where market_google_coordinates_id={0}
+                    select top 1 
+                        @potamus_market_id = potamus_market_id 
+                    from [dbo].[google_market_coordinates] where market_google_coordinates_id={0}
+
                     set @visited = {1}                    
 
                     select 

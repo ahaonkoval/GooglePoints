@@ -61,6 +61,7 @@
     <Compile Include="Objects\Market.cs" />
     <Compile Include="Objects\MarketType.cs" />
     <Compile Include="Objects\PoligonPlace.cs" />
+    <Compile Include="Objects\SegmentVisited.cs" />
     <Compile Include="Searchers\CoreGooglePoints.cs" />
     <Compile Include="ObjectSerializer\googlepoint.cs" />
     <Compile Include="Objects\GoogleStatus.cs" />

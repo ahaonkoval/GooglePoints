@@ -14,5 +14,6 @@ namespace Core.Objects
         public string name { get; set; }
         public decimal lat { get; set; }
         public decimal lng { get; set; }
+        public bool is_region_center { get; set; }
     }
 }

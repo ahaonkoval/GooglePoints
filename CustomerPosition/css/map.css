@@ -22,6 +22,17 @@ h2 {
     width:90px;
 }
 
+.left-label-free {
+    font-family: Arial, Helvetica, sans-serif; /* Рубленый шрифт текста */
+    margin: 0; /* Обнуляем отступы браузера */
+    float:left;
+}
+
+.middle-text{
+    font-family: Arial, Helvetica, sans-serif; /* Рубленый шрифт текста */
+    font-size: 0.8em; /* Размер текста */
+}
+
 .left-label-wider {
     font-family: Arial, Helvetica, sans-serif; /* Рубленый шрифт текста */
     margin: 0; /* Обнуляем отступы браузера */
@@ -37,6 +48,35 @@ h2 {
     font-size: 0.9em; /* Размер текста */
     float:left;
     width:100%;
+}
+
+.with-all-label {
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    margin-bottom: 2px;
+    font-size: 1.0em; /* Размер текста */
+    text-align:center;
+    width:100%;
+    background: #97e2f3; /* Цвет фона */
+}
+
+.with-all-label-caption {
+    font-family: Arial, Helvetica, sans-serif; 
+    font-size: 0.8em; 
+    text-align:left;
+    width:100%;
+}
+
+
+.district-label {
+    font-family: Arial, Helvetica, sans-serif; /* Рубленый шрифт текста */
+    font-size: 1.2em; /* Размер текста */
+    font-style:normal;
+    color:brown;
+}
+
+.checkbox-no-select{
+    font-family: Arial, Helvetica, sans-serif; /* Рубленый шрифт текста */
+    font-size: 0.8em; /* Размер текста */
 }
 
 
@@ -68,6 +108,7 @@ h2 {
 
 .line {
     border-bottom: 1px groove #333; /* Линия между ссылками */
+    margin-bottom: 5px;
 }
 
 .a-i-o{

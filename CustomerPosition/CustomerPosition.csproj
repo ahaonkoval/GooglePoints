@@ -241,8 +241,12 @@
     <Content Include="Content\Site.css" />
     <Content Include="img\Epicentrk.svg.png" />
     <Content Include="img\logo-big-epicenter.png" />
+    <Content Include="js\events.js" />
     <Content Include="js\map_o.js" />
     <Content Include="map_o.aspx" />
+    <Content Include="Scripts\colorpicker\jscolor-example.html" />
+    <Content Include="Scripts\colorpicker\jscolor.js" />
+    <Content Include="Scripts\colorpicker\jscolor.min.js" />
     <Content Include="WebForm1.aspx" />
     <Content Include="WebForm2.aspx" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />

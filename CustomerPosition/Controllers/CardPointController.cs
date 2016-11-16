@@ -43,10 +43,11 @@ namespace CustomerPosition.Controllers
         public IEnumerable<CardPoint> GetPointsByMarketId(int id)
         {
             var parameters = Request.GetQueryNameValuePairs();
-            var visit_count = parameters.Where(o => o.Key == "visit").FirstOrDefault();
-            
+            var visit = parameters.Where(o => o.Key == "visit").FirstOrDefault();
+            var distance = parameters.Where(o => o.Key == "distance").FirstOrDefault();
+
             DictEpicetnrK dict = new DictEpicetnrK();
-            return dict.GetPointsByMarketId(id, Convert.ToInt32(visit_count.Value));
+            return dict.GetPointsByMarketId(id, Convert.ToInt32(visit.Value));
         }
     }
 }
