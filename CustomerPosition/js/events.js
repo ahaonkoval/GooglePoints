@@ -1,6 +1,13 @@
 ﻿
-var setEvent = function () {
+$(document).ajaxStart(function () {
+    hover.open({
+        content: '<div>Завантаження данних...</div><div><p><img src="img/loading.gif"></p></div>'
+    });
+}).ajaxStop(function () {
+    hover.close();
+});
 
+var setEvent = function () {
     $("#cmbregion").change(function () {
         var region_id = this.value;
         $('#showall_region').prop('checked', false);
@@ -43,18 +50,22 @@ var setEvent = function () {
         //}
     });
 
-    $("#cmbmarket").change(function () {
-        var market_id = $("#cmbmarket").val();
+    $("#cmbmarket_getcard").change(function () {
+        var market_id = $("#cmbmarket_getcard").val();
         osmap.showMarket(market_id);
+    });
+
+    $("#cmbmarket_visitcard").change(function () {
+        var market_id = $("#cmbmarket_visitcard").val();
+        osmap.showMarketVisited(market_id);
     });
 
     $('#lradius').keyup(function (e) {
         if (e.keyCode == 13) {
-            var market_id = $("#cmbmarket").val();
+            var market_id = $("#cmbmarket_getcard").val();
             if (market_id > 0) {
                 osmap.showMarket(market_id);
             }
-            //$(this).trigger("enterKey");
         }
     });
 
@@ -66,5 +77,3 @@ var setEvent = function () {
         osmap.fillMarketCustomerPoints();
     });
 };
-
-//

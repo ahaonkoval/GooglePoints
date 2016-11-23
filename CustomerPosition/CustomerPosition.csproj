@@ -237,12 +237,16 @@
     <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
     <Content Include="css\map.css" />
+    <Content Include="css\modal.css" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="img\close.png" />
     <Content Include="img\Epicentrk.svg.png" />
+    <Content Include="img\loading.gif" />
     <Content Include="img\logo-big-epicenter.png" />
     <Content Include="js\events.js" />
     <Content Include="js\map_o.js" />
+    <Content Include="js\modal.js" />
     <Content Include="map_o.aspx" />
     <Content Include="Scripts\colorpicker\jscolor-example.html" />
     <Content Include="Scripts\colorpicker\jscolor.js" />

@@ -1,5 +1,5 @@
 ﻿
-$(document).ready(function () {
+$(document).ready(function () {    
     osmap.init();
 });
 
@@ -13,7 +13,9 @@ osmap = {
 
     current_market: null,
 
-    current_circle: null,
+    current_circle_getcard: null,
+
+    current_circle_visit: null,
     //L.circle
     customer_points: [],
     //L.Polygon
@@ -38,7 +40,18 @@ osmap = {
         osmap.fillRegions();        
         osmap.fillMarkets();       
 
+        osmap.fillDictVisited();
+
         setEvent();
+        /*
+        osmap.map.on('click', function (e) {
+            var popLocation = e.latlng;
+            var popup = L.popup()
+            .setLatLng(popLocation)
+            .setContent('<p> lat:' + popLocation.lat + ' lng:' + popLocation.lng + '</p>')
+            .openOn(osmap.map);
+        });
+        */
     },
 
     Radius: function () {
@@ -46,6 +59,28 @@ osmap = {
         if (lradius > 0) {
             return lradius;
         } else return 5;
+    },
+
+    Distance: function(){
+        var lenkm = $("#lenkm").val();
+        if (lenkm > 0) {
+            return lenkm;
+        } else return 5;
+    },
+
+    fillDictVisited: function () {
+        $.ajax({
+            url: 'api/cardpoint/getsegmentbyvisited/1',
+            type: 'get',
+            success: function (dict) {
+                var cmbvisit = $("#cmbvisit");
+                cmbvisit.html('');
+                $.each(dict, function (key, item) {
+                    cmbvisit.prepend("<option value='" + item.id + "' >" + item.name + "</option>");
+                });
+                cmbvisit.prepend("<option value='' selected='selected'></option>");
+            }
+        });
     },
 
     // завантаження на клієнт та запонення селекта  <-- завантажуєтся при виборі області
@@ -133,7 +168,6 @@ osmap = {
 
             osmap.map.addLayer(item.LeafLetPolygon);
             item.visible = true;
-
             
             if ($("#show_title").attr("checked") == "checked") {
 
@@ -258,12 +292,18 @@ osmap = {
     },
 
     fillMarketControls: function () {
-        var cmbmarket = $("#cmbmarket");
+        var cmbmarket_getcard = $("#cmbmarket_getcard");
+        var cmbmarket_visitcard = $("#cmbmarket_visitcard");
+
         $.each(osmap.markets, function (key, item) {
-            cmbmarket.prepend("<option value='" + item.market_google_coordinates_id
+            cmbmarket_getcard.prepend("<option value='" + item.market_google_coordinates_id
+                + "'>" + item.label + ' - ' + item.name_short + "</option>");
+
+            cmbmarket_visitcard.prepend("<option value='" + item.market_google_coordinates_id
                 + "'>" + item.label + ' - ' + item.name_short + "</option>");
         });
-        cmbmarket.prepend("<option value='all' selected='selected'></option>");
+        cmbmarket_getcard.prepend("<option value='all' selected='selected'></option>");
+        cmbmarket_visitcard.prepend("<option value='all' selected='selected'></option>");
 
         osmap.drawMarkets();
     },
@@ -288,30 +328,50 @@ osmap = {
                 var latlng = new L.LatLng(market.lat, market.lng);
                 osmap.map.setView(latlng, 11);
 
-                if (osmap.current_circle != undefined) {
-                    osmap.current_circle.removeFrom(osmap.map);
+                if (osmap.current_circle_getcard != undefined) {
+                    osmap.current_circle_getcard.removeFrom(osmap.map);
                 }
 
                 var radius = osmap.Radius();
-
-                //if (market.name_short == 'Хмельницький' || market.name_short == 'Чернігів') {
-                osmap.current_circle = L.circle([market.lat, market.lng], {
+                osmap.current_circle_getcard = L.circle([market.lat, market.lng], {
                     radius: radius * 1000,
                     fill: false
                 });
-                osmap.current_circle.addTo(osmap.map);
-                //}
+                osmap.current_circle_getcard.addTo(osmap.map);
+            }
+        });
+    },
+
+    showMarketVisited: function (market_id) {
+        $.ajax({
+            url: 'api/market/' + market_id,
+            type: 'get',
+            success: function (market) {
+                var latlng = new L.LatLng(market.lat, market.lng);
+                osmap.map.setView(latlng, 11);
+
+                if (osmap.current_circle_visit != undefined) {
+                    osmap.current_circle_visit.removeFrom(osmap.map);
+                }
+
+                var distanse = osmap.Distance();
+                osmap.current_circle_visit = L.circle([market.lat, market.lng], {
+                    radius: distanse * 1000,
+                    fill: false,
+                    color: '#885FC1'
+                });
+                osmap.current_circle_visit.addTo(osmap.map);
             }
         });
     },
     // з адресними точками працюємо тільки через БД
-    drawCustomerPoints: function () {
+    drawMarkertCustomerPoints: function () {
         $.each(osmap.customer_points, function (key, item) {
             osmap.map.addLayer(item);
         });
     },
 
-    clearCustomerPoints: function () {
+    clearMarketCustomerPoints: function () {
         $.each(osmap.customer_points, function (key, item) {
             osmap.map.removeLayer(item);
         });
@@ -321,21 +381,24 @@ osmap = {
 
     // Загрузка данных на клиент
     fillMarketCustomerPoints: function () {
-        var market_id = $("#cmbmarket").val();
-        var visit = $("#cmbvisit").val();
-        var distance = $("#lenkm").val();
+        var market_id = $("#cmbmarket_getcard").val();
+        var radius = $("#lradius").val();
+
+        if (market_id == undefined) {
+            modal.open({
+                content: '<div>Не вибраний магазин видачі карти</div>'
+            });
+            return;
+        }
 
         $.ajax({
-            url: 'api/cardpoint/getpointsbymarketid/' + market_id,
+            url: 'api/cardpoint/getpointsbymarketstat/' + market_id,
             type: 'get',
             data: {
-                visit: visit,
-                distance: distance
+                radius: radius
             },
             success: function (points) {
-
-                osmap.clearCustomerPoints();
-
+                osmap.clearMarketCustomerPoints();
                 $.each(points, function (key, item) {
                     var point = new L.circleMarker(
                         new L.LatLng(item.lat, item.lng),
@@ -346,9 +409,31 @@ osmap = {
                         });
                     osmap.customer_points.push(point);
                 });
+                osmap.drawMarkertCustomerPoints();
 
-                osmap.drawCustomerPoints();
+                osmap.getMarketCustomerCountPoints();
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                osmap.clearCustomerPoints();
             }
         });
     },
+
+    getMarketCustomerCountPoints: function () {
+        var market_id = $("#cmbmarket_getcard").val();
+        var radius = $("#lradius").val();
+
+        $.ajax({
+            url: 'api/cardpoint/getcountpointsbymarketstat/' + market_id,
+            type: 'get',
+            data: {
+                radius: radius
+            },
+            success: function (count) {
+                modal.open({
+                    content: '<div class="with-all-label">Кількість карт з адресою: '+ count + '</div>'
+                });
+            }
+        });
+    }
 };

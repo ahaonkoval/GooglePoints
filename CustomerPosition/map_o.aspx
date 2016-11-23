@@ -8,6 +8,7 @@
     <title>Карти</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.1/dist/leaflet.css" />
     <link rel="stylesheet" href="css/map.css" />
+    <link rel="stylesheet" href="css/modal.css" />
 
     <%--    <script src="Scripts/jquery-1.8.2.intellisense.js"></script>--%>
     <script src="Scripts/jquery-1.8.2.js"></script>
@@ -28,13 +29,16 @@
     <script src="https://unpkg.com/leaflet@1.0.1/dist/leaflet.js"></script>
     <script src="js/map_o.js"></script>
     <script src="js/events.js"></script>
+    <script src="js/modal.js"></script>
     <script src="Scripts/colorpicker/jscolor.js"></script>
 
 </head>
 <body>
     <div id="conteiner">
         <div id="head">
-            <h1>Розміщення</h1>
+            <h1>
+                Епіцентр
+            </h1>
         </div>
         <div id="menu">
             <div>
@@ -68,12 +72,12 @@
 
             <div>
                 <div class="with-all-label">
-                    Статистика по магазину
+                    Статистика по магазину видачі карти
                 </div>
 
                 <div class="with-all-label-caption">Маркет видачі карти:</div>
                 <div>
-                    <select id="cmbmarket" style="width: 100%;"></select>
+                    <select id="cmbmarket_getcard" style="width: 100%;"></select>
                 </div>
 
                 <div class="left-label">
@@ -82,12 +86,12 @@
                     </div>
                 </div>
 
-                <input type="text" id="lradius" style="width: 100px;" />
+                <input type="text" id="lradius" value="5" style="width: 100px;" />
 
                 <div>
-                    <div class="left-label-free" style="width:87px;">
+                    <div class="left-label-free" style="width: 87px;">
                         <div class="middle-text">Колір точок:</div>
-                    </div>                    
+                    </div>
                     <button id="btncolor_market_points"
                         class="jscolor {valueElement:null, onFineChange:'setcolor_market_points(this)',value:'FF6699'}"
                         style="width: 50px; height: 20px;">
@@ -107,6 +111,7 @@
                 <div class="left-label"></div>
                 <div>
                     <button id="btnshow_market_point">Показати на карті</button>
+                    <button id="btn_clear_market_point">Прибрати</button>
                 </div>
 
                 <div class="line"></div>
@@ -115,12 +120,12 @@
             <div>
 
                 <div class="with-all-label">
-                    По анкетним данним покупців
+                    По магазину візиту покупців
                 </div>
 
                 <div class="with-all-label-caption">Маркет візиту карти:</div>
                 <div>
-                    <select id="cmbmarketvisited" style="width: 100%;"></select>
+                    <select id="cmbmarket_visitcard" style="width: 100%;"></select>
                 </div>
 
 
@@ -171,9 +176,7 @@
             </div>
 
             <div class="line"></div>
-            <%--            <div>
-                 <p><input type="checkbox" name="option1" value="a1" checked="checked"/>Відображати магазини</p>
-            </div>--%>
+
         </div>
         <div id="content">
         </div>

@@ -11,7 +11,7 @@ using Core.Objects;
 
 namespace CoreData
 {
-    public class DictEpicetnrK
+    public class DictEpicetnrK: IDisposable
     {
         public string DbConnectString
         {
@@ -411,6 +411,93 @@ namespace CoreData
                 connection.Close();
             }
             return cardpoints;
+        }
+
+        public IEnumerable<CardPoint> GetPointsByMarketStat(int market_id, int radius)
+        {
+            List<CardPoint> cardpoints = new List<CardPoint>();
+            using (SqlConnection connection = new SqlConnection(this.DbConnectString))
+            {
+                SqlCommand cmd = connection.CreateCommand();
+                cmd.CommandText = "dbo.p_get_points_by_market_stat";
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.Add("@market_google_coordinates_id", SqlDbType.Int).Value = market_id;
+                cmd.Parameters.Add("@radius", SqlDbType.Int).Value = radius;
+
+                connection.Open();
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    cardpoints.Add(new CardPoint
+                    {
+                        google_point_id = Convert.ToInt32(reader[0]),
+                        lat = Convert.ToDecimal(reader[1]),
+                        lng = Convert.ToDecimal(reader[2]),
+                        google_status = reader[3].ToString(),
+                        formatted_address = reader[4].ToString()
+                    });
+                }
+                connection.Close();
+            }
+            return cardpoints;
+        }
+
+        public int GetCountPointsByMarketStat(int market_id, int radius)
+        {
+            int CardCount = 0;
+            using (SqlConnection connection = new SqlConnection(this.DbConnectString))
+            {
+                SqlCommand cmd = connection.CreateCommand();
+                cmd.CommandText = "dbo.p_get_count_points_by_market_stat";
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.Add("@market_google_coordinates_id", SqlDbType.Int).Value = market_id;
+                cmd.Parameters.Add("@radius", SqlDbType.Int).Value = radius;
+
+                connection.Open();
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    CardCount = Convert.ToInt32(reader[0]);
+                }
+                connection.Close();
+            }
+
+            return CardCount;
+        }
+
+        public List<Dict> GetSegmentByVisited()
+        {
+            List<Dict> visits = new List<Dict>();
+            using (SqlConnection connection = new SqlConnection(this.DbConnectString))
+            {
+                SqlCommand cmd = connection.CreateCommand();
+                cmd.CommandText = "SELECT [id],[name],[start],[end] FROM dbo.dict_segment_visited order by id";
+                cmd.CommandType = CommandType.Text;
+
+                connection.Open();
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    var o = new Dict
+                    {
+                        id = Convert.ToInt32(reader[0]),
+                        name = Convert.ToString(reader[1])
+                    };
+                    visits.Add(o);
+                }
+                connection.Close();
+            }
+            return visits.OrderByDescending(m=> m.id).ToList();
+        }
+
+        void IDisposable.Dispose()
+        {
+            //throw new NotImplementedException();
         }
     }
 }

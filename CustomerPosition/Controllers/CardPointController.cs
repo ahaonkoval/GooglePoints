@@ -49,5 +49,40 @@ namespace CustomerPosition.Controllers
             DictEpicetnrK dict = new DictEpicetnrK();
             return dict.GetPointsByMarketId(id, Convert.ToInt32(visit.Value));
         }
+
+        public IEnumerable<CardPoint> GetPointsByMarketStat(int id)
+        {
+            var parameters = Request.GetQueryNameValuePairs();
+            var radius = parameters.Where(o => o.Key == "radius").FirstOrDefault();
+
+            using (DictEpicetnrK dict = new DictEpicetnrK())
+            {
+                return dict.GetPointsByMarketStat(id, Convert.ToInt32(radius.Value));
+            }
+        }
+
+        public int GetCountPointsByMarketStat(int id)
+        {
+            var parameters = Request.GetQueryNameValuePairs();
+            var radius = parameters.Where(o => o.Key == "radius").FirstOrDefault();
+
+            using (DictEpicetnrK dict = new DictEpicetnrK())
+            {
+                return dict.GetCountPointsByMarketStat(id, Convert.ToInt32(radius.Value));
+            }
+        }
+
+        public IEnumerable<Dict> GetSegmentByVisited(int id)
+        {
+            List<Dict> o = new List<Dict>();
+            using (DictEpicetnrK dict = new DictEpicetnrK())
+            {
+                if (id == 1)
+                {
+                    o = dict.GetSegmentByVisited();
+                }
+            }
+            return o;
+        }
     }
 }

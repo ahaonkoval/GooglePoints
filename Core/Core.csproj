@@ -56,6 +56,7 @@
     <Compile Include="ObjectSerializer\GeoObject.cs" />
     <Compile Include="ObjectSerializer\NewDataSet.cs" />
     <Compile Include="Objects\CardPoint.cs" />
+    <Compile Include="Objects\Dict.cs" />
     <Compile Include="Objects\District.cs" />
     <Compile Include="Objects\DistrictCoordinate.cs" />
     <Compile Include="Objects\Market.cs" />
