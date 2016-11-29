@@ -18,6 +18,8 @@ osmap = {
     current_circle_visit: null,
     //L.circle
     customer_points: [],
+    //
+    customer_used_viber: [],
     //L.Polygon
     districts: [],
     //object
@@ -42,16 +44,9 @@ osmap = {
 
         osmap.fillDictVisited();
 
+        //osmap.fillCustomerPointsUsedViber();
+
         setEvent();
-        /*
-        osmap.map.on('click', function (e) {
-            var popLocation = e.latlng;
-            var popup = L.popup()
-            .setLatLng(popLocation)
-            .setContent('<p> lat:' + popLocation.lat + ' lng:' + popLocation.lng + '</p>')
-            .openOn(osmap.map);
-        });
-        */
     },
 
     Radius: function () {
@@ -224,7 +219,7 @@ osmap = {
         cmbdistricts.prepend("<option value='all' selected='selected'></option>");
     },
 
-    // завантаження на клієнт та запонення селекта  <-- завантажуєтся при старті сторінки
+    //завантаження на клієнт та запонення селекта  <-- завантажуєтся при старті сторінки
     fillRegions: function () {
         $.ajax({
             url: 'api/region/',
@@ -250,7 +245,7 @@ osmap = {
         }
     },
 
-    // перемальовуємо всі райони області
+    //перемальовуємо всі райони області
     drawRegions: function () {
         osmap.drawDistrictAll();
     },
@@ -366,9 +361,15 @@ osmap = {
     },
     // з адресними точками працюємо тільки через БД
     drawMarkertCustomerPoints: function () {
+
+        var markers = L.markerClusterGroup();
+
         $.each(osmap.customer_points, function (key, item) {
-            osmap.map.addLayer(item);
+            //osmap.map.addLayer(item);
+            markers.addLayer(item);
         });
+
+        osmap.map.addLayer(markers);
     },
 
     clearMarketCustomerPoints: function () {
@@ -400,13 +401,17 @@ osmap = {
             success: function (points) {
                 osmap.clearMarketCustomerPoints();
                 $.each(points, function (key, item) {
-                    var point = new L.circleMarker(
-                        new L.LatLng(item.lat, item.lng),
-                        {
-                            radius: 1,
-                            interactive: false,
-                            color: '#' + osmap.color_market_points
-                        });
+                    //var point = new L.circleMarker(
+                    //    new L.LatLng(item.lat, item.lng),
+                    //    {
+                    //        radius: 1,
+                    //        interactive: false,
+                    //        color: '#' + osmap.color_market_points
+                    //    });
+
+                    var point = new L.marker(
+                        new L.LatLng(item.lat, item.lng));
+
                     osmap.customer_points.push(point);
                 });
                 osmap.drawMarkertCustomerPoints();
@@ -434,6 +439,38 @@ osmap = {
                     content: '<div class="with-all-label">Кількість карт з адресою: '+ count + '</div>'
                 });
             }
+        });
+    },
+
+    fillCustomerPointsUsedViber: function () {
+        $.ajax({
+            url: 'api/cardpoint/getpointscustomerusedviber/1',
+            type: 'get',
+            success: function (points) {
+                $.each(points, function (key, item) {
+
+                    var myIcon = L.icon({
+                        iconUrl: 'img/viber.png',
+                        iconRetinaUrl: 'img/viber.png',
+                        iconSize: [15, 15],
+                    });
+                    var point = new L.marker(
+                        new L.LatLng(item.lat, item.lng),
+                        {
+                            clickable: false,
+                            icon: myIcon
+                        });
+
+                    osmap.customer_used_viber.push(point);
+                });
+                osmap.drawCustomerPointsUsedViber();
+            }
+        });
+    },
+
+    drawCustomerPointsUsedViber: function () {
+        $.each(osmap.customer_used_viber, function (key, item) {
+            osmap.map.addLayer(item);
         });
     }
 };

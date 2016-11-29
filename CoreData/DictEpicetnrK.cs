@@ -494,6 +494,50 @@ namespace CoreData
             }
             return visits.OrderByDescending(m=> m.id).ToList();
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<CardPoint> GetPointsCustomerUsedViber()
+        {
+            List<CardPoint> cardpoints = new List<CardPoint>();
+            using (SqlConnection connection = new SqlConnection(this.DbConnectString))
+            {
+                SqlCommand cmd = connection.CreateCommand();
+                cmd.CommandText = @"
+                    select 
+                        c.google_point_id,
+	                    c.lat,
+	                    c.lng,
+                        c.google_status,
+	                    c.formatted_address
+                    from [dbo].[crm_isviber] a 
+                    inner join [dbo].[v_card_customers_true] b on a.card_id = b.card_id
+                    inner join geolocation..google_card_points c on a.card_id = c.card_id
+                    where
+	                    b.name_city is not null
+	                    and c.google_status = 'OK'
+                ";
+                cmd.CommandType = CommandType.Text;
+
+                connection.Open();
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    cardpoints.Add(new CardPoint
+                    {
+                        google_point_id = Convert.ToInt32(reader[0]),
+                        lat = Convert.ToDecimal(reader[1]),
+                        lng = Convert.ToDecimal(reader[2]),
+                        google_status = reader[3].ToString(),
+                        formatted_address = reader[4].ToString()
+                    });
+                }
+                connection.Close();
+            }
+            return cardpoints;
+        }
 
         void IDisposable.Dispose()
         {

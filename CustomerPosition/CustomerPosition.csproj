@@ -240,10 +240,14 @@
     <Content Include="css\modal.css" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="img\viber.png" />
     <Content Include="img\close.png" />
     <Content Include="img\Epicentrk.svg.png" />
     <Content Include="img\loading.gif" />
     <Content Include="img\logo-big-epicenter.png" />
+    <Content Include="Scripts\leaflet\dict\Leaflet.markercluster-src.js" />
+    <Content Include="Scripts\leaflet\dict\MarkerCluster.css" />
+    <Content Include="Scripts\leaflet\dict\MarkerCluster.Default.css" />
     <Content Include="js\events.js" />
     <Content Include="js\map_o.js" />
     <Content Include="js\modal.js" />
@@ -251,6 +255,9 @@
     <Content Include="Scripts\colorpicker\jscolor-example.html" />
     <Content Include="Scripts\colorpicker\jscolor.js" />
     <Content Include="Scripts\colorpicker\jscolor.min.js" />
+    <Content Include="Scripts\leaflet\leaflet-src.js" />
+    <Content Include="Scripts\leaflet\leaflet.css" />
+    <Content Include="Scripts\leaflet\leaflet.js" />
     <Content Include="WebForm1.aspx" />
     <Content Include="WebForm2.aspx" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
@@ -283,6 +290,7 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Scripts\leaflet\leaflet-src.map" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -61,6 +61,14 @@ namespace CustomerPosition.Controllers
             }
         }
 
+        public IEnumerable<CardPoint> GetPointsCustomerUsedViber(int id)
+        {
+            using (DictEpicetnrK dict = new DictEpicetnrK())
+            {
+                return dict.GetPointsCustomerUsedViber();
+            }
+        }
+
         public int GetCountPointsByMarketStat(int id)
         {
             var parameters = Request.GetQueryNameValuePairs();

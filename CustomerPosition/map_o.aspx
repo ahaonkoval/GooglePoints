@@ -6,9 +6,12 @@
 <head runat="server">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Карти</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.1/dist/leaflet.css" />
+<%--    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.1/dist/leaflet.css" />--%>
     <link rel="stylesheet" href="css/map.css" />
     <link rel="stylesheet" href="css/modal.css" />
+    <link rel="stylesheet" href="Scripts/leaflet/leaflet.css"/>
+    <link rel="stylesheet" href="Scripts/leaflet/dict/MarkerCluster.css"/>
+    <link rel="stylesheet" href="Scripts/leaflet/dict/MarkerCluster.Default.css"/>
 
     <%--    <script src="Scripts/jquery-1.8.2.intellisense.js"></script>--%>
     <script src="Scripts/jquery-1.8.2.js"></script>
@@ -31,6 +34,8 @@
     <script src="js/events.js"></script>
     <script src="js/modal.js"></script>
     <script src="Scripts/colorpicker/jscolor.js"></script>
+    <script src="Scripts/leaflet/leaflet.js"></script>
+    <script src="Scripts/leaflet/dict/Leaflet.markercluster-src.js"></script>
 
 </head>
 <body>
