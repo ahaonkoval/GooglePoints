@@ -85,6 +85,7 @@ namespace Core.Helpers
             }
 
             Point = new PointMap(Point.CardId, GeoPoint, Point.SourceAddress, formatted_address, status);
+            Point.MarketType = MarketType.EpicentrK;
             XmlSerializer serializer = new XmlSerializer(typeof(GeocodeResponse));
             using (StringWriter textWriter = new StringWriter())
             {

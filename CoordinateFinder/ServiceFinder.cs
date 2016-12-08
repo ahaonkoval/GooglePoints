@@ -32,15 +32,15 @@ namespace CoordinateFinder
             timer.Elapsed += OnTimer;
             timer.Start();
 
-            var yandex_timer = new System.Timers.Timer { Interval = yandex_interval };
-            yandex_timer.Elapsed += yandex_timer_Elapsed;
-            yandex_timer.Start();
+            //var yandex_timer = new System.Timers.Timer { Interval = yandex_interval };
+            //yandex_timer.Elapsed += yandex_timer_Elapsed;
+            //yandex_timer.Start();
         }
 
         void yandex_timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-            CoreYandexPoints YandexFinder = new CoreYandexPoints();
-            YandexFinder.GetYandexCoordinates();
+            //CoreYandexPoints YandexFinder = new CoreYandexPoints();
+            //YandexFinder.GetYandexCoordinates();
         }
 
         protected override void OnStop()

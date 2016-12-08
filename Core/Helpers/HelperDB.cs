@@ -23,6 +23,7 @@ namespace Core.Helpers
         {
             //TODO пишемо запит в БД через храниму процедуру gpo.get_unchecked_address
             PointMap Point = new PointMap();
+            Point.MarketType = MarketType.EpicentrK;
             string DbConnectString = ConfigurationManager.AppSettings["DbConnectString"];
 
             using (SqlConnection connect = new SqlConnection(DbConnectString))
