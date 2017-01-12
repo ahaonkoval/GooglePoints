@@ -8,7 +8,9 @@ using System.Data.SqlClient;
 using System.Configuration;
 using Core;
 using Core.Objects;
-
+/*
+ * работаем с данными по Епицентру (адреса, точки и так далее...)
+ */
 namespace CoreData
 {
     public class DictEpicetnrK: IDisposable

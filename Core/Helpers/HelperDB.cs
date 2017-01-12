@@ -23,7 +23,7 @@ namespace Core.Helpers
         {
             //TODO пишемо запит в БД через храниму процедуру gpo.get_unchecked_address
             PointMap Point = new PointMap();
-            Point.MarketType = MarketType.EpicentrK;
+            Point.Type = PointType.CustomerEpicentrK;
             string DbConnectString = ConfigurationManager.AppSettings["DbConnectString"];
 
             using (SqlConnection connect = new SqlConnection(DbConnectString))
@@ -54,6 +54,7 @@ namespace Core.Helpers
 
             return Point;
         }
+
         public void SetEpicentrKPoint(PointMap Point)
         {
             string DbConnectString = ConfigurationManager.AppSettings["DbConnectString"];
@@ -175,5 +176,195 @@ namespace Core.Helpers
         {
             _logger.Error(string.Format("{0}: {1}", ErrorType, ex.Message));
         }
+
+
+
+        #region LIST
+        public void CreateList(string name, string description)
+        {
+            string DbConnectString = ConfigurationManager.AppSettings["DbConnectString"];
+            using (SqlConnection connect = new SqlConnection(DbConnectString))
+            {
+                SqlCommand cmd = connect.CreateCommand();
+                cmd.CommandText = @"
+                    INSERT INTO [dbo].[list]
+                       ([name]
+                       ,[created]
+                       ,[description])
+                    VALUES
+                       (@name
+                       ,@created
+                       ,@description)
+                ";
+                cmd.CommandType = CommandType.Text;
+
+                cmd.Parameters.AddWithValue("@name", name);
+                cmd.Parameters.AddWithValue("@created", DateTime.Now);
+                cmd.Parameters.AddWithValue("@description", description);
+
+                try
+                {
+                    cmd.Connection.Open();
+                    cmd.ExecuteNonQuery();
+                    cmd.Connection.Close();
+                }
+                catch (Exception ex)
+                {
+                    SetError("Ошибка сохранения точки в БД", ex);
+                }
+                finally
+                {
+                    if (connect.State != ConnectionState.Closed) connect.Close();
+                }
+            }
+            //throw new Exception(" need create 'CreateList'");
+        }
+
+        public void AddListToAddress(string address, int search_engine_id, string external_key, int list_id)
+        {
+            string DbConnectString = ConfigurationManager.AppSettings["DbConnectString"];
+            using (SqlConnection connect = new SqlConnection(DbConnectString))
+            {
+                SqlCommand cmd = connect.CreateCommand();
+                cmd.CommandText = @"
+                    INSERT INTO [dbo].[list_address]
+                               ([address]
+                               ,[search_engine_id]
+                               ,[created]
+                               ,[external_key]
+                               ,[list_id])
+                         VALUES
+                               (
+                                @address
+                               ,@search_engine_id
+                               ,@created
+                               ,@external_key
+                               ,@list_id
+                               )
+                ";
+                cmd.CommandType = CommandType.Text;
+
+                cmd.Parameters.AddWithValue("@address", address);
+                cmd.Parameters.AddWithValue("@search_engine_id", search_engine_id);
+                cmd.Parameters.AddWithValue("@created", DateTime.Now);
+                cmd.Parameters.AddWithValue("@external_key", external_key);
+                cmd.Parameters.AddWithValue("@list_id", list_id);
+
+                try
+                {
+                    cmd.Connection.Open();
+                    cmd.ExecuteNonQuery();
+                    cmd.Connection.Close();
+                }
+                catch (Exception ex)
+                {
+                    SetError("Ошибка сохранения точки в БД", ex);
+                }
+                finally
+                {
+                    if (connect.State != ConnectionState.Closed) connect.Close();
+                }
+            }
+            //throw new Exception(" need create 'AddListToAddress'");
+        }
+
+        public void AddListToAddress(string address, int search_engine_id, string external_key, int list_id, decimal lat, decimal lng)
+        {
+            string DbConnectString = ConfigurationManager.AppSettings["DbConnectString"];
+            using (SqlConnection connect = new SqlConnection(DbConnectString))
+            {
+                SqlCommand cmd = connect.CreateCommand();
+                cmd.CommandText = @"
+                    INSERT INTO [dbo].[list_address]
+                               ([address]
+                               ,[lat]
+                               ,[lng]
+                               ,[search_engine_id]
+                               ,[created]
+                               ,[external_key]
+                               ,[list_id])
+                         VALUES
+                               (
+                                @address
+                               ,@lat
+                               ,@lng
+                               ,@search_engine_id
+                               ,@created
+                               ,@external_key
+                               ,@list_id
+                               )
+                ";
+                cmd.CommandType = CommandType.Text;
+
+                cmd.Parameters.AddWithValue("@address", address);
+
+                cmd.Parameters.AddWithValue("@lat", lat);
+                cmd.Parameters.AddWithValue("@lng", lng);
+
+                cmd.Parameters.AddWithValue("@search_engine_id", search_engine_id);
+                cmd.Parameters.AddWithValue("@created", DateTime.Now);
+                cmd.Parameters.AddWithValue("@external_key", external_key);
+                cmd.Parameters.AddWithValue("@list_id", list_id);
+
+                try
+                {
+                    cmd.Connection.Open();
+                    cmd.ExecuteNonQuery();
+                    cmd.Connection.Close();
+                }
+                catch (Exception ex)
+                {
+                    SetError("Ошибка сохранения точки в БД", ex);
+                }
+                finally
+                {
+                    if (connect.State != ConnectionState.Closed) connect.Close();
+                }
+            }
+
+            //throw new Exception(" need create 'AddListToAddress'");
+        }
+
+        public void GetPointsByListId(int list_id)
+        {
+            //TODO пишемо запит в БД через храниму процедуру gpo.get_unchecked_address
+            PointMap Point = new PointMap();
+            Point.Type = PointType.CustomerEpicentrK;
+            string DbConnectString = ConfigurationManager.AppSettings["DbConnectString"];
+
+            using (SqlConnection connect = new SqlConnection(DbConnectString))
+            {
+                SqlCommand cmd = connect.CreateCommand();
+                cmd.CommandText = "dbo.get_unchecked_address";
+                cmd.CommandType = CommandType.StoredProcedure;
+                try
+                {
+                    cmd.Connection.Open();
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    DataTable t = new DataTable();
+                    t.Load(reader);
+                    cmd.Connection.Close();
+                    if (t.Rows.Count > 0)
+                    {
+                        Point.CardId = Convert.ToInt64(t.Rows[0]["card_id"]);
+                        Point.SourceAddress = Convert.ToString(t.Rows[0]["source_address"]);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    SetError("Ошибка получения адреса", ex);
+                }
+                finally
+                {
+                    if (connect.State != ConnectionState.Closed) connect.Close();
+                }
+            }
+
+            //return Point;
+            //throw new Exception(" need create 'GetPointsByListId'");
+        }
+        #endregion
+
+
     }
 }

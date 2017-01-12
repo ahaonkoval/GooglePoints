@@ -64,13 +64,13 @@ namespace Core.Helpers
 
         private PointMap ProcessingRequestResult(PointMap Point, GeocodeResponse message)
         {
-            GoogleStatus status = (GoogleStatus)Enum.Parse(typeof(GoogleStatus), message.status);
+            SearchEngineStatus status = (SearchEngineStatus)Enum.Parse(typeof(SearchEngineStatus), message.status);
             //PointMap Point = null;
             Coordinate GeoPoint = null;
 
             string formatted_address = string.Empty;
 
-            if (status == GoogleStatus.OK) {
+            if (status == SearchEngineStatus.OK) {
                 if (message.result.Count() == 1)
                 {
                     GeoPoint = new Coordinate(
@@ -80,12 +80,12 @@ namespace Core.Helpers
                 }
                 else
                 {
-                    status = GoogleStatus.MORE_ONE_POINT;
+                    status = SearchEngineStatus.MORE_ONE_POINT;
                 }
             }
 
             Point = new PointMap(Point.CardId, GeoPoint, Point.SourceAddress, formatted_address, status);
-            Point.MarketType = MarketType.EpicentrK;
+            Point.Type = PointType.CustomerEpicentrK;
             XmlSerializer serializer = new XmlSerializer(typeof(GeocodeResponse));
             using (StringWriter textWriter = new StringWriter())
             {

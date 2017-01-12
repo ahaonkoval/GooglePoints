@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace Core.Objects
 {
-    public enum MarketType
+    public enum PointType
     {
-        EpicentrK = 1,
-        NewLine = 2
+        CustomerEpicentrK   = 1,
+        CustomerNewLine     = 2,
+        BoardPoint          = 3,
+        MarketPoint         = 4
     }
 }

@@ -71,9 +71,9 @@ namespace Core.Helpers
 
                         if (Point.Coordinate != null)
                         {
-                            Point.Status = GoogleStatus.OK;
+                            Point.Status = SearchEngineStatus.OK;
                         } else {
-                            Point.Status = GoogleStatus.ZERO_RESULTS;
+                            Point.Status = SearchEngineStatus.ZERO_RESULTS;
                         }
                     }
                     return Point;

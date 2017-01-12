@@ -14,7 +14,7 @@ namespace Core.Objects
         "INVALID_REQUEST" – как правило, указывает на отсутствие в запросе полей address, components или latlng.
         "UNKNOWN_ERROR" – указывает, что запрос не удалось обработать из-за ошибки сервера. Если повторить попытку, запрос может оказаться успешным.
      */
-    public enum GoogleStatus {
+    public enum SearchEngineStatus {
         OK = 1,
         ZERO_RESULTS = 2,
         OVER_QUERY_LIMIT = 3,

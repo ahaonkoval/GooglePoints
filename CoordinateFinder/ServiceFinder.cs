@@ -28,7 +28,8 @@ namespace CoordinateFinder
             var interval = Convert.ToInt32(ConfigurationManager.AppSettings["ServiceRunIntervalInSeconds"]);
             var yandex_interval = Convert.ToInt32(ConfigurationManager.AppSettings["YandexRunIntervalInSeconds"]);
 
-            var timer = new System.Timers.Timer { Interval = interval };
+            var timer = new System.Timers.Timer {
+                Interval = interval };
             timer.Elapsed += OnTimer;
             timer.Start();
 

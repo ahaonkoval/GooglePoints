@@ -51,8 +51,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\HelperGoogleDB.cs" />
     <Compile Include="Helpers\HelperOpenRoadMaps.cs" />
     <Compile Include="Helpers\HelperYandex.cs" />
+    <Compile Include="Helpers\HelperYandexDB.cs.cs" />
     <Compile Include="ObjectSerializer\GeoObject.cs" />
     <Compile Include="ObjectSerializer\NewDataSet.cs" />
     <Compile Include="Objects\CardPoint.cs" />

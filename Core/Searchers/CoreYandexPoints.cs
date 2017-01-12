@@ -21,7 +21,7 @@ namespace Core.Searchers
         }
         public void GetYandexCoordinates() {
             PointMap Point = hdb.GetNewLinePointForGeocoding();
-            Point.MarketType = MarketType.NewLine;
+            Point.Type = PointType.CustomerNewLine;
 
             _logger.Info(string.Format("{0} {1} {2}", Point.CardId.ToString(), "Address Get DB for check Yandex:", Point.SourceAddress));
 

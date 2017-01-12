@@ -11,17 +11,17 @@ namespace Core.Objects
 {
     public class PointMap
     {
-        public MarketType MarketType { get; set; }
+        public PointType Type { get; set; }
         public long CardId { get; set; }
         public Coordinate Coordinate { get; set; }
         public string SourceAddress { get; set; }
         public string FormattedAddress { get; set; }
-        public GoogleStatus Status { get; set; }
+        public SearchEngineStatus Status { get; set; }
         public string Xml { get; set; }
         public PointMap() {
             this.Coordinate = null;
         }
-        public PointMap(long card_id, Coordinate coordinate, string source_address, string formatted_address, GoogleStatus status)
+        public PointMap(long card_id, Coordinate coordinate, string source_address, string formatted_address, SearchEngineStatus status)
         {
             this.CardId = card_id;
             this.Coordinate = coordinate;
@@ -32,10 +32,10 @@ namespace Core.Objects
 
         public void Save(HelperDB helper)
         {
-            switch (this.MarketType) {
-                case Objects.MarketType.EpicentrK: helper.SetEpicentrKPoint(this);
+            switch (this.Type) {
+                case Objects.PointType.CustomerEpicentrK: helper.SetEpicentrKPoint(this);
                     break;
-                case Objects.MarketType.NewLine: helper.SetNewLinePoint(this);
+                case Objects.PointType.CustomerNewLine: helper.SetNewLinePoint(this);
                     break;
             }            
         }

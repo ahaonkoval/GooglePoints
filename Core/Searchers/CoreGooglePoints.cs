@@ -25,7 +25,7 @@ namespace Core.Searchers
             _logger.Info(string.Format("{0} {1} {2}", Point.CardId.ToString(), "Address Get DB:", Point.SourceAddress));
 
             Point = hgoogle.GetRequestXmlDocumentPointsByAddress(Point);
-            _logger.Info(string.Format("{0} GoogleStatus:{5}, {1} {2} Lat={3}, Lng={4}", 
+            _logger.Info(string.Format("{0} SearchEngineStatus:{5}, {1} {2} Lat={3}, Lng={4}", 
                 Point.CardId.ToString(), 
                 "Point Get Googe:", 
                 Point.FormattedAddress, 
