@@ -6,8 +6,12 @@
 <head runat="server">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Карти</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.1/dist/leaflet.css" />
+<%--    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.1/dist/leaflet.css" />--%>
     <link rel="stylesheet" href="css/map.css" />
+    <link rel="stylesheet" href="css/modal.css" />
+    <link rel="stylesheet" href="Scripts/leaflet/leaflet.css"/>
+    <link rel="stylesheet" href="Scripts/leaflet/dict/MarkerCluster.css"/>
+    <link rel="stylesheet" href="Scripts/leaflet/dict/MarkerCluster.Default.css"/>
 
     <%--    <script src="Scripts/jquery-1.8.2.intellisense.js"></script>--%>
     <script src="Scripts/jquery-1.8.2.js"></script>
@@ -25,21 +29,28 @@
     <script src="Scripts/knockout-2.2.0.js"></script>
     <script src="Scripts/modernizr-2.6.2.js"></script>
 
-    <script src="https://unpkg.com/leaflet@1.0.1/dist/leaflet.js"></script>
-    <script src="js/map.js"></script>
-</head>
-<body onload="initialize();">
-    <%--<div id="mapid" style="width: 1000px; height: 800px;"></div>--%>
+    <script src="Scripts/leaflet/leaflet.js"></script>
+    <script src="js/map_o.js"></script>
+    <script src="js/events.js"></script>
+    <script src="js/modal.js"></script>
+    <script src="Scripts/colorpicker/jscolor.js"></script>
+    <script src="Scripts/leaflet/leaflet.js"></script>
+    <script src="Scripts/leaflet/dict/Leaflet.markercluster-src.js"></script>
 
-    <%--    <form id="frm_map" runat="server">
-        <div id="map_canvas" style="width:100%; height:100%"></div>
-    </form>--%>
+</head>
+<body>
     <div id="conteiner">
         <div id="head">
-            <h1>Розміщення</h1>
+            <h1>
+                Епіцентр
+            </h1>
         </div>
         <div id="menu">
             <div>
+<%--                <div class="with-all-label">
+                    Відображення адміністративного поділу
+                </div>
+
                 <div class="left-label">
                     <label>Область:</label>
                 </div>
@@ -54,27 +65,101 @@
                 </div>
 
                 <div class="left-label"></div>
-                <div>
-                    <button id="btn_showdistrict" onclick="btnshowdistrict();">Показати на карті</button>
+                <div class="checkbox-no-select">
+                    <input type="checkbox" name="showall" id="showall_region" value="0" disabled="disabled" />Показати всі
                 </div>
+                <div class="left-label"></div>
+                <div class="middle-text">
+                    <input type="checkbox" name="show_title" id="show_title" />Показати підписи
+                </div>--%>
             </div>
             <div class="line"></div>
+
             <div>
-                <div class="left-label">Маркет</div>
+                <div class="with-all-label">
+                    Статистика по магазину видачі карти
+                </div>
+
+                <div class="with-all-label-caption">Маркет видачі карти:</div>
                 <div>
-                    <select id="cmbmarket" style="width: 170px;"></select>
+                    <select id="cmbmarket_getcard" style="width: 100%;"></select>
                 </div>
 
                 <div class="left-label">
-                    <label>Відстань(км):</label>
+                    <div class="middle-text">
+                        <label>Радіус (км):</label>
+                    </div>
                 </div>
-                <input type="text" id="lenkm" style="width: 100px;" />
+
+                <input type="text" id="lradius" value="5" style="width: 100px;" />
+
+                <div>
+                    <div class="left-label-free" style="width: 87px;">
+                        <div class="middle-text">Колір точок:</div>
+                    </div>
+                    <button id="btncolor_market_points"
+                        class="jscolor {valueElement:null, onFineChange:'setcolor_market_points(this)',value:'FF6699'}"
+                        style="width: 50px; height: 20px;">
+                    </button>
+                    <script>
+                        function setcolor_market_points(color) {
+                            osmap.color_market_points = color;
+                        }
+                    </script>
+                </div>
+
+                <div class="left-label"></div>
+                <div class="middle-text">
+                    <input type="checkbox" name="show_market" id="showmarket" value="0" checked="checked" />Показати всі магазини
+                </div>
+
+                <div class="left-label"></div>
+                <div>
+                    <button id="btnshow_market_point">Показати на карті</button>
+                    <%--<button id="btn_clear_market_point">Прибрати</button>--%>
+                </div>
+
+                <div class="line"></div>
+            </div>
+
+   <%--         <div>
+
+                <div class="with-all-label">
+                    По магазину візиту покупців
+                </div>
+
+                <div class="with-all-label-caption">Маркет візиту карти:</div>
+                <div>
+                    <select id="cmbmarket_visitcard" style="width: 100%;"></select>
+                </div>
+
 
                 <div class="left-label">
-                    <label>Візити:</label>
+                    <div class="middle-text">
+                        <label>Відстань (км):</label>
+                    </div>
+                </div>
+
+                <input type="text" id="lenkm" style="width: 45px;" />
+
+                <div>
+                    <div class="left-label-free" style="width:87px;">
+                        <div class="middle-text">Колір точок:</div>
+                    </div>                    
+                    <button id="btncolor_visit_points"
+                        class="jscolor {valueElement:null,value:'8140A1'}"
+                        style="width: 50px; height: 20px;">
+                    </button>
+                </div>
+                
+
+                <div class="left-label">
+                    <div class="middle-text">
+                        <label>Візити:</label>
+                    </div>
                 </div>
                 <div>
-                    <select id="visit_count" style="width: 104px;">
+                    <select id="cmbvisit" style="width: 104px;">
                         <option value="-1"></option>
                         <option value="1">1</option>
                         <option value="2">2</option>
@@ -91,13 +176,12 @@
                 </div>
                 <div class="left-label"></div>
                 <div>
-                    <button id="btn_showpoints" onclick="btnshowpoints();">Показати на карті</button>
+                    <button id="btnshow_visit_points">Показати на карті</button>
                 </div>
-            </div>
+            </div>--%>
+
             <div class="line"></div>
-            <div>
-                 <p><input type="checkbox" name="option1" value="a1" checked="checked"/>Відображати магазини</p>
-            </div>
+
         </div>
         <div id="content">
         </div>
