@@ -240,11 +240,15 @@
     <Content Include="css\modal.css" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="img\market_point_25_41.png" />
+    <Content Include="img\market_point — копия.png" />
     <Content Include="img\viber.png" />
     <Content Include="img\close.png" />
     <Content Include="img\Epicentrk.svg.png" />
     <Content Include="img\loading.gif" />
     <Content Include="img\logo-big-epicenter.png" />
+    <Content Include="img\epicentrk_market.png" />
+    <Content Include="img\market_point.png" />
     <Content Include="Scripts\leaflet\dict\Leaflet.markercluster-src.js" />
     <Content Include="Scripts\leaflet\dict\MarkerCluster.css" />
     <Content Include="Scripts\leaflet\dict\MarkerCluster.Default.css" />
@@ -259,7 +263,7 @@
     <Content Include="Scripts\leaflet\images\layers.png" />
     <Content Include="Scripts\leaflet\images\marker-icon-2x.png" />
     <Content Include="Scripts\leaflet\images\marker-icon.png" />
-    <Content Include="Scripts\leaflet\images\marker-shadow.png" />
+    <Content Include="img\marker-shadow.png" />
     <Content Include="Scripts\leaflet\leaflet-src.js" />
     <Content Include="Scripts\leaflet\leaflet.css" />
     <Content Include="Scripts\leaflet\leaflet.js" />

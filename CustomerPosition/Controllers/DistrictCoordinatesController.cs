@@ -39,11 +39,12 @@ namespace CustomerPosition.Controllers
         public void Delete(int id)
         {
         }
-        public IEnumerable<DistrictCoordinate> GetDistrictCoordinates(int id)
+        public IEnumerable<DataModels.DictDistrictsCoordinates> GetDistrictCoordinates(int id)
         {
-            DictEpicetnrK dict = new DictEpicetnrK();
-            return dict.GetDistrictCoordinates(id);
-
+            using (DictGeoData dict = new DictGeoData())
+                return dict.GetDistrictCoordinates(id);
+            //DictEpicetnrK dict = new DictEpicetnrK();
+            //return dict.GetDistrictCoordinates(id);
         }
     }
 }

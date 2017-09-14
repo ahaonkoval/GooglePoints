@@ -60,7 +60,7 @@ function initialize() {
         success: function (resp) {
             var cmbmarket = $("#cmbmarket");
             $.each(resp, function (key, item) {
-                cmbmarket.prepend("<option value='" + item.market_google_coordinates_id
+                cmbmarket.prepend("<option value='" + item.market_coordinates_id
                     + "' selected='selected'>" + item.label + ' - ' + item.name_short + "</option>");
 
                 setmarket(item.address, item.lat, item.lng);

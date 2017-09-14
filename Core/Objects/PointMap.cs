@@ -16,12 +16,12 @@ namespace Core.Objects
         public Coordinate Coordinate { get; set; }
         public string SourceAddress { get; set; }
         public string FormattedAddress { get; set; }
-        public SearchEngineStatus Status { get; set; }
+        public GoogleEngineStatus Status { get; set; }
         public string Xml { get; set; }
         public PointMap() {
             this.Coordinate = null;
         }
-        public PointMap(long card_id, Coordinate coordinate, string source_address, string formatted_address, SearchEngineStatus status)
+        public PointMap(long card_id, Coordinate coordinate, string source_address, string formatted_address, GoogleEngineStatus status)
         {
             this.CardId = card_id;
             this.Coordinate = coordinate;

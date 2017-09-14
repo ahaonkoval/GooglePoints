@@ -94,13 +94,13 @@
                 <input type="text" id="lradius" value="5" style="width: 100px;" />
 
                 <div>
-                    <div class="left-label-free" style="width: 87px;">
+<%--                    <div class="left-label-free" style="width: 87px;">
                         <div class="middle-text">Колір точок:</div>
-                    </div>
-                    <button id="btncolor_market_points"
+                    </div>--%>
+<%--                    <button id="btncolor_market_points"
                         class="jscolor {valueElement:null, onFineChange:'setcolor_market_points(this)',value:'FF6699'}"
                         style="width: 50px; height: 20px;">
-                    </button>
+                    </button>--%>
                     <script>
                         function setcolor_market_points(color) {
                             osmap.color_market_points = color;

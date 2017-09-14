@@ -10,7 +10,7 @@ using Core.Objects;
 
 namespace Core.Searchers
 {
-    public class CoreGooglePoints
+    public class CoreGooglePoints: IDisposable
     {
         HelperDB hdb;
         HelperGoogle hgoogle;
@@ -21,7 +21,7 @@ namespace Core.Searchers
             hgoogle = new HelperGoogle();
         }
         public void GetGooleCoordinates() {
-            PointMap Point = hdb.GetEpicentrKPointForGeocoding();
+            PointMap Point = hdb.GetEpicentrKPointForGeocoding(); //<-- Перейменувати та використовувати нову процедуру
             _logger.Info(string.Format("{0} {1} {2}", Point.CardId.ToString(), "Address Get DB:", Point.SourceAddress));
 
             Point = hgoogle.GetRequestXmlDocumentPointsByAddress(Point);
@@ -39,6 +39,41 @@ namespace Core.Searchers
                 _logger.Info(string.Format("{0} {1}", Point.CardId.ToString(), "Point Set Data in DB"));
             }
         }
+
+        #region IDisposable Support
+        private bool disposedValue = false; // Для определения избыточных вызовов
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    // TODO: освободить управляемое состояние (управляемые объекты).
+                }
+
+                // TODO: освободить неуправляемые ресурсы (неуправляемые объекты) и переопределить ниже метод завершения.
+                // TODO: задать большим полям значение NULL.
+
+                disposedValue = true;
+            }
+        }
+
+        // TODO: переопределить метод завершения, только если Dispose(bool disposing) выше включает код для освобождения неуправляемых ресурсов.
+        // ~CoreGooglePoints() {
+        //   // Не изменяйте этот код. Разместите код очистки выше, в методе Dispose(bool disposing).
+        //   Dispose(false);
+        // }
+
+        // Этот код добавлен для правильной реализации шаблона высвобождаемого класса.
+        public void Dispose()
+        {
+            // Не изменяйте этот код. Разместите код очистки выше, в методе Dispose(bool disposing).
+            Dispose(true);
+            // TODO: раскомментировать следующую строку, если метод завершения переопределен выше.
+            // GC.SuppressFinalize(this);
+        }
+        #endregion
     }
 }
 

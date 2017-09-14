@@ -20,10 +20,12 @@ namespace CustomerPosition.Controllers
         }
 
         // GET api/district/5
-        public District GetDistrictById(int id)
+        public DataModels.DictDistricts GetDistrictById(int id)
         {
-            DictEpicetnrK dict = new DictEpicetnrK();
-            return dict.GetDistrictById(id);
+            using (DictGeoData dict = new DictGeoData())
+                return dict.GetDistrictById(id);
+            //DictEpicetnrK dict = new DictEpicetnrK();
+            //return dict.GetDistrictById(id);
         }
 
         // POST api/district
@@ -40,11 +42,13 @@ namespace CustomerPosition.Controllers
         public void Delete(int id)
         {
         }
-        public IEnumerable<District> GetDistricts(int id)
+        public IEnumerable<DataModels.DictDistricts> GetDistricts(int id)
         {
-            DictEpicetnrK dict = new DictEpicetnrK();
-            return dict.GetDistrictsByRegionId(id);
-            
+            using (DictGeoData dict = new DictGeoData())
+                return dict.GetDistrictsByRegionId(id);
+
+            //DictEpicetnrK dict = new DictEpicetnrK();
+            //return dict.GetDistrictsByRegionId(id);
         }
         
     }

@@ -9,6 +9,7 @@ using System.Configuration;
 using NLog;
 using Core.Objects;
 
+
 namespace Core.Helpers
 {
     public class HelperDB
@@ -23,34 +24,37 @@ namespace Core.Helpers
         {
             //TODO пишемо запит в БД через храниму процедуру gpo.get_unchecked_address
             PointMap Point = new PointMap();
-            Point.Type = PointType.CustomerEpicentrK;
-            string DbConnectString = ConfigurationManager.AppSettings["DbConnectString"];
 
-            using (SqlConnection connect = new SqlConnection(DbConnectString))
-            {
-                SqlCommand cmd = connect.CreateCommand();
-                cmd.CommandText = "dbo.get_unchecked_address";
-                cmd.CommandType = CommandType.StoredProcedure;
-                try
-                {
-                    cmd.Connection.Open();
-                    SqlDataReader reader = cmd.ExecuteReader();
-                    DataTable t = new DataTable();
-                    t.Load(reader);
-                    cmd.Connection.Close();
-                    if (t.Rows.Count > 0) { 
-                    Point.CardId = Convert.ToInt64(t.Rows[0]["card_id"]);
-                    Point.SourceAddress = Convert.ToString(t.Rows[0]["source_address"]);}
-                }
-                catch (Exception ex)
-                {
-                    SetError("Ошибка получения адреса", ex);
-                }
-                finally
-                {
-                    if (connect.State != ConnectionState.Closed) connect.Close();
-                }
-            }
+
+
+            //Point.Type = PointType.CustomerEpicentrK;
+            //string DbConnectString = ConfigurationManager.AppSettings["DbConnectString"];
+
+            //using (SqlConnection connect = new SqlConnection(DbConnectString))
+            //{
+            //    SqlCommand cmd = connect.CreateCommand();
+            //    cmd.CommandText = "dbo.get_unchecked_address";
+            //    cmd.CommandType = CommandType.StoredProcedure;
+            //    try
+            //    {
+            //        cmd.Connection.Open();
+            //        SqlDataReader reader = cmd.ExecuteReader();
+            //        DataTable t = new DataTable();
+            //        t.Load(reader);
+            //        cmd.Connection.Close();
+            //        if (t.Rows.Count > 0) { 
+            //        Point.CardId = Convert.ToInt64(t.Rows[0]["card_id"]);
+            //        Point.SourceAddress = Convert.ToString(t.Rows[0]["source_address"]);}
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        SetError("Ошибка получения адреса", ex);
+            //    }
+            //    finally
+            //    {
+            //        if (connect.State != ConnectionState.Closed) connect.Close();
+            //    }
+            //}
 
             return Point;
         }

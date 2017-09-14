@@ -47,50 +47,50 @@ namespace CustomerPosition.Controllers
             var distance = parameters.Where(o => o.Key == "distance").FirstOrDefault();
 
             DictEpicetnrK dict = new DictEpicetnrK();
-            return dict.GetPointsByMarketId(id, Convert.ToInt32(visit.Value));
+            return dict.GetPointsByMarketId(id);
         }
 
-        public IEnumerable<CardPoint> GetPointsByMarketStat(int id)
+        public IEnumerable<CardPoint> GetPointsByMarketRadius(int id)
         {
             var parameters = Request.GetQueryNameValuePairs();
             var radius = parameters.Where(o => o.Key == "radius").FirstOrDefault();
 
             using (DictEpicetnrK dict = new DictEpicetnrK())
             {
-                return dict.GetPointsByMarketStat(id, Convert.ToInt32(radius.Value));
+                return dict.GetPointsByMarketRadius(id, Convert.ToInt32(radius.Value));
             }
         }
 
-        public IEnumerable<CardPoint> GetPointsCustomerUsedViber(int id)
-        {
-            using (DictEpicetnrK dict = new DictEpicetnrK())
-            {
-                return dict.GetPointsCustomerUsedViber();
-            }
-        }
+        //public IEnumerable<CardPoint> GetPointsCustomerUsedViber(int id)
+        //{
+        //    using (DictEpicetnrK dict = new DictEpicetnrK())
+        //    {
+        //        return dict.GetPointsCustomerUsedViber();
+        //    }
+        //}
 
-        public int GetCountPointsByMarketStat(int id)
+        public int GetCountPointsByMarketRadius(int id)
         {
             var parameters = Request.GetQueryNameValuePairs();
             var radius = parameters.Where(o => o.Key == "radius").FirstOrDefault();
 
             using (DictEpicetnrK dict = new DictEpicetnrK())
             {
-                return dict.GetCountPointsByMarketStat(id, Convert.ToInt32(radius.Value));
+                return dict.GetCountPointsByMarketRadius(id, Convert.ToInt32(radius.Value));
             }
         }
 
-        public IEnumerable<Dict> GetSegmentByVisited(int id)
-        {
-            List<Dict> o = new List<Dict>();
-            using (DictEpicetnrK dict = new DictEpicetnrK())
-            {
-                if (id == 1)
-                {
-                    o = dict.GetSegmentByVisited();
-                }
-            }
-            return o;
-        }
+        //public IEnumerable<Dict> GetSegmentByVisited(int id)
+        //{
+        //    List<Dict> o = new List<Dict>();
+        //    using (DictEpicetnrK dict = new DictEpicetnrK())
+        //    {
+        //        if (id == 1)
+        //        {
+        //            o = dict.GetSegmentByVisited();
+        //        }
+        //    }
+        //    return o;
+        //}
     }
 }

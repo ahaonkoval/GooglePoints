@@ -26,7 +26,7 @@ namespace CoordinateFinder
         protected override void OnStart(string[] args)
         {
             var interval = Convert.ToInt32(ConfigurationManager.AppSettings["ServiceRunIntervalInSeconds"]);
-            var yandex_interval = Convert.ToInt32(ConfigurationManager.AppSettings["YandexRunIntervalInSeconds"]);
+            //var yandex_interval = Convert.ToInt32(ConfigurationManager.AppSettings["YandexRunIntervalInSeconds"]);
 
             var timer = new System.Timers.Timer {
                 Interval = interval };

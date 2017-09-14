@@ -51,30 +51,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Helpers\HelperGoogleDB.cs" />
+    <Compile Include="Objects\WebClientExtended.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Helpers\HelperOpenRoadMaps.cs" />
     <Compile Include="Helpers\HelperYandex.cs" />
-    <Compile Include="Helpers\HelperYandexDB.cs.cs" />
+    <Compile Include="ObjectSerializer\OSMPlace.cs" />
     <Compile Include="ObjectSerializer\GeoObject.cs" />
-    <Compile Include="ObjectSerializer\NewDataSet.cs" />
     <Compile Include="Objects\CardPoint.cs" />
-    <Compile Include="Objects\Dict.cs" />
-    <Compile Include="Objects\District.cs" />
-    <Compile Include="Objects\DistrictCoordinate.cs" />
-    <Compile Include="Objects\Market.cs" />
     <Compile Include="Objects\MarketType.cs" />
-    <Compile Include="Objects\PoligonPlace.cs" />
-    <Compile Include="Objects\SegmentVisited.cs" />
     <Compile Include="Searchers\CoreGooglePoints.cs" />
-    <Compile Include="ObjectSerializer\googlepoint.cs" />
+    <Compile Include="ObjectSerializer\GeocodeResponse.cs" />
     <Compile Include="Objects\GoogleStatus.cs" />
     <Compile Include="Helpers\HelperDB.cs" />
     <Compile Include="Helpers\HelperGoogle.cs" />
-    <Compile Include="Objects\Region.cs" />
-    <Compile Include="ObjectSerializer\searchresults.cs" />
     <Compile Include="Objects\PointMap.cs" />
     <Compile Include="Objects\ProcessingStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Searchers\CoreOsmPoints.cs" />
     <Compile Include="Searchers\CoreYandexPoints.cs" />
   </ItemGroup>
   <ItemGroup>

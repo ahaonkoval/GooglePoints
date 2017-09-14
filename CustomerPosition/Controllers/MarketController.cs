@@ -14,17 +14,17 @@ namespace CustomerPosition.Controllers
     public class MarketController : ApiController
     {
         // GET api/market
-        public IEnumerable<Market> Get()
+        public IEnumerable<DataModels.DictTradeMarkets> Get()
         {
-            DictEpicetnrK dict = new DictEpicetnrK();
-            return dict.GetMarkets();
+            using (DictEpicetnrK dict = new DictEpicetnrK())
+                return dict.GetMarkets();
         }
 
         // GET api/market/5
-        public Market Get(int id)
+        public DataModels.DictTradeMarkets Get(int id)
         {
-            DictEpicetnrK dict = new DictEpicetnrK();
-            return dict.GetMarketById(id);
+            using (DictEpicetnrK dict = new DictEpicetnrK())
+                return dict.GetMarketById(id);
         }
 
         // POST api/market

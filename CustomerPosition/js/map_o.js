@@ -42,7 +42,8 @@ osmap = {
         osmap.fillRegions();        
         osmap.fillMarkets();       
 
-        osmap.fillDictVisited();
+        // Пока отключим
+        //osmap.fillDictVisited();
 
         //osmap.fillCustomerPointsUsedViber();
 
@@ -257,10 +258,11 @@ osmap = {
             success: function (markets) {
                 $.each(markets, function (key, item) {
 
-                    var market_location = new L.LatLng(item.lat, item.lng);
+                    var market_location = new L.LatLng(item.Lat, item.Lng);
                     var icon = L.icon({
-                        iconUrl: 'img/Epicentrk.svg.png',
-                        iconSize: [40, 40]
+                        iconUrl: 'img/epicentrk_market.png',
+                        //shadowUrl: 'img/marker-shadow.png',
+                        iconSize: [55, 65]
                     });
                     var marker = new L.Marker(
                         market_location,
@@ -270,12 +272,12 @@ osmap = {
 
                     var market = {
                         marker: marker,
-                        label: item.label,
-                        name_short: item.name_short,
-                        market_google_coordinates_id: item.market_google_coordinates_id,
-                        address: item.address,
-                        lat: item.lat,
-                        lng: item.lng
+                        label: item.Label,
+                        name_short: item.NameShort,
+                        market_coordinates_id: item.MarketId,
+                        address: item.Address,
+                        lat: item.Lat,
+                        lng: item.Lng
                     }
 
                     osmap.markets.push(market);
@@ -291,10 +293,10 @@ osmap = {
         var cmbmarket_visitcard = $("#cmbmarket_visitcard");
 
         $.each(osmap.markets, function (key, item) {
-            cmbmarket_getcard.prepend("<option value='" + item.market_google_coordinates_id
+            cmbmarket_getcard.prepend("<option value='" + item.market_coordinates_id
                 + "'>" + item.label + ' - ' + item.name_short + "</option>");
 
-            cmbmarket_visitcard.prepend("<option value='" + item.market_google_coordinates_id
+            cmbmarket_visitcard.prepend("<option value='" + item.market_coordinates_id
                 + "'>" + item.label + ' - ' + item.name_short + "</option>");
         });
         cmbmarket_getcard.prepend("<option value='all' selected='selected'></option>");
@@ -320,7 +322,7 @@ osmap = {
             url: 'api/market/' + market_id,
             type: 'get',
             success: function (market) {
-                var latlng = new L.LatLng(market.lat, market.lng);
+                var latlng = new L.LatLng(market.Lat, market.Lng);
                 osmap.map.setView(latlng, 11);
 
                 if (osmap.current_circle_getcard != undefined) {
@@ -328,7 +330,7 @@ osmap = {
                 }
 
                 var radius = osmap.Radius();
-                osmap.current_circle_getcard = L.circle([market.lat, market.lng], {
+                osmap.current_circle_getcard = L.circle([market.Lat, market.Lng], {
                     radius: radius * 1000,
                     fill: false
                 });
@@ -393,7 +395,7 @@ osmap = {
         }
 
         $.ajax({
-            url: 'api/cardpoint/getpointsbymarketstat/' + market_id,
+            url: 'api/cardpoint/getpointsbymarketradius/' + market_id,
             type: 'get',
             data: {
                 radius: radius
@@ -419,7 +421,7 @@ osmap = {
                 osmap.getMarketCustomerCountPoints();
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                osmap.clearCustomerPoints();
+                //osmap.clearCustomerPoints();
             }
         });
     },
@@ -429,7 +431,7 @@ osmap = {
         var radius = $("#lradius").val();
 
         $.ajax({
-            url: 'api/cardpoint/getcountpointsbymarketstat/' + market_id,
+            url: 'api/cardpoint/getcountpointsbymarketradius/' + market_id,
             type: 'get',
             data: {
                 radius: radius

@@ -64,13 +64,13 @@ namespace Core.Helpers
 
         private PointMap ProcessingRequestResult(PointMap Point, GeocodeResponse message)
         {
-            SearchEngineStatus status = (SearchEngineStatus)Enum.Parse(typeof(SearchEngineStatus), message.status);
+            GoogleEngineStatus status = (GoogleEngineStatus)Enum.Parse(typeof(GoogleEngineStatus), message.status);
             //PointMap Point = null;
             Coordinate GeoPoint = null;
 
             string formatted_address = string.Empty;
 
-            if (status == SearchEngineStatus.OK) {
+            if (status == GoogleEngineStatus.OK) {
                 if (message.result.Count() == 1)
                 {
                     GeoPoint = new Coordinate(
@@ -80,7 +80,7 @@ namespace Core.Helpers
                 }
                 else
                 {
-                    status = SearchEngineStatus.MORE_ONE_POINT;
+                    status = GoogleEngineStatus.MORE_ONE_POINT;
                 }
             }
 

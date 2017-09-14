@@ -14,10 +14,10 @@ namespace CustomerPosition.Controllers
     public class RegionController : ApiController
     {
         // GET api/googledata
-        public IEnumerable<Region> Get()
+        public IEnumerable<DataModels.DictRegions> Get()
         {
-            DictEpicetnrK dict = new DictEpicetnrK();
-            return dict.GetRegions();
+            using (DictGeoData dict = new DictGeoData())
+                return dict.GetRegions();
         }
 
         // GET api/googledata/5

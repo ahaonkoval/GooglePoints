@@ -24,13 +24,25 @@ namespace GooglePoints
         
         static void Main(string[] args)
         {
-            CoreYandexPoints cgp = new CoreYandexPoints();
-            cgp.GetYandexCoordinates();
+            WebClientExtended client = new WebClientExtended();
+            string url = "http://nominatim.openstreetmap.org/search?q=Хмельницький вулиця Свободи 16а&format=xml";
+
+            string st = System.Text.Encoding.UTF8.GetString(client.DownloadData(url));
+            XmlSerializer serializer = new XmlSerializer(typeof(Searchresults));
+
+            using (TextReader tr = new StringReader(st))
+            {
+                Searchresults result = (Searchresults)serializer.Deserialize(tr);
+            }
+
+            //Console.WriteLine(result);
 
             //WebRequest request = WebRequest.Create(
-            //  "https://geocode-maps.yandex.ru/1.x/?geocode=Украина, 69015, г.Запорожье ул. Трегубова ,1");
+            //  //"http://nominatim.openstreetmap.org/search?q=івано-франківськ Гаркуші 17&format=xml"); //&addressdetails=1
+            //  "http://nominatim.openstreetmap.org/search?q=Хмельницький вулиця Свободи 16а&format=xml");
             //// If required by the server, set the credentials.
             //request.Credentials = CredentialCache.DefaultCredentials;
+            //request.Method = "GET";
             //// Get the response.
             //WebResponse response = request.GetResponse();
             //// Display the status.
@@ -38,24 +50,35 @@ namespace GooglePoints
             //// Get the stream containing content returned by the server.
             //Stream dataStream = response.GetResponseStream();
 
+
+            //XmlSerializer serializer = new XmlSerializer(typeof(Searchresults));
+            ////Place resultingMessage = (Place)serializer.Deserialize(dataStream);
+
             //using (StreamReader reader = new StreamReader(dataStream, Encoding.UTF8))
             //{
-            //    while (reader.Peek() >= 0)
+            //    string xml = reader.ReadToEnd();
+            //    using (TextReader tr = new StringReader(xml))
             //    {
-            //        string line = reader.ReadLine();
-            //        if (line.Contains("<pos>"))
-            //        {
-            //            string[] position = line.Replace("<pos>", "").Replace("</pos>", "").Trim().Split(' ');
-            //            Console.WriteLine("lat:" + position[1] + " lng:" + position[0]);
-            //        }
-
-            //        //Console.WriteLine(reader.ReadLine());
+            //        Searchresults result = (Searchresults)serializer.Deserialize(tr);
             //    }
-            //}
-            ////String responseString = reader.ReadToEnd();
 
-            //Console.ReadLine();
-            
+            //    //    //Console.WriteLine(xml);
+            //    //    //while (reader.Peek() >= 0)
+            //    //    //{
+            //    //    //string line = reader.ReadLine();
+            //    //    //if (line.Contains("<pos>"))
+            //    //    //{
+            //    //    //    string[] position = line.Replace("<pos>", "").Replace("</pos>", "").Trim().Split(' ');
+            //    //    //    Console.WriteLine("lat:" + position[1] + " lng:" + position[0]);
+            //    //    //}
+
+            //    //    //Console.WriteLine(reader.ReadLine());
+            //    //    //}
+            //}
+            //String responseString = reader.ReadToEnd();
+
+            Console.ReadLine();
+
 
             //XmlSerializer serializer = new XmlSerializer(typeof(GeoObject));
             //MemoryStream memStream = new MemoryStream(Encoding.UTF8.GetBytes(responseFromServer));
