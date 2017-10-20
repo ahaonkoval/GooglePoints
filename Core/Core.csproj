@@ -60,21 +60,26 @@
     <Compile Include="ObjectSerializer\GeoObject.cs" />
     <Compile Include="Objects\CardPoint.cs" />
     <Compile Include="Objects\MarketType.cs" />
-    <Compile Include="Searchers\CoreGooglePoints.cs" />
+    <Compile Include="Searchers\GooglePointsSearcher.cs" />
     <Compile Include="ObjectSerializer\GeocodeResponse.cs" />
     <Compile Include="Objects\GoogleStatus.cs" />
     <Compile Include="Helpers\HelperDB.cs" />
     <Compile Include="Helpers\HelperGoogle.cs" />
-    <Compile Include="Objects\PointMap.cs" />
+    <Compile Include="Objects\ProcessPoint.cs" />
     <Compile Include="Objects\ProcessingStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Searchers\CoreOsmPoints.cs" />
+    <Compile Include="Searchers\OsmPointsSearcher.cs" />
     <Compile Include="Searchers\CoreYandexPoints.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\CoreData\CoreData.csproj">
+      <Project>{af4e6d2d-16b0-433e-bff8-55f35dddc2c7}</Project>
+      <Name>CoreData</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

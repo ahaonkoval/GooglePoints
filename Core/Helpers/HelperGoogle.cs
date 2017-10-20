@@ -19,7 +19,7 @@ namespace Core.Helpers
     public class HelperGoogle
     {
         private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
-        public PointMap GetRequestXmlDocumentPointsByAddress(PointMap Point)
+        public ProcessPoint GetRequestXmlDocumentPointsByAddress(ProcessPoint Point)
         {
             try
             {
@@ -62,10 +62,10 @@ namespace Core.Helpers
             }
         }
 
-        private PointMap ProcessingRequestResult(PointMap Point, GeocodeResponse message)
+        private ProcessPoint ProcessingRequestResult(ProcessPoint p, GeocodeResponse message)
         {
-            GoogleEngineStatus status = (GoogleEngineStatus)Enum.Parse(typeof(GoogleEngineStatus), message.status);
-            //PointMap Point = null;
+            GoogleEngineStatus status = (GoogleEngineStatus)Enum.Parse(typeof(GoogleEngineStatus), message.status);            
+
             Coordinate GeoPoint = null;
 
             string formatted_address = string.Empty;
@@ -84,15 +84,59 @@ namespace Core.Helpers
                 }
             }
 
-            Point = new PointMap(Point.CardId, GeoPoint, Point.SourceAddress, formatted_address, status);
-            Point.Type = PointType.CustomerEpicentrK;
+            /* Перевизначення точки */
+            p = new ProcessPoint(
+                p.PointId, p.CardId, p.CrmCustomerId, GeoPoint, p.SourceAddress, formatted_address);
+            p.Type = PointType.CustomerEpicentrK;
+            /* Визначення загального статусу */
+
+            switch (status)
+            {
+                case GoogleEngineStatus.INVALID_REQUEST:
+                    {
+                        p.PStatus = ProcessStatus.ERROR;
+                        break;
+                    }
+                case GoogleEngineStatus.MORE_ONE_POINT:
+                    {
+                        p.PStatus = ProcessStatus.MORE_ONE_POINT;
+                        break;
+                    }
+                case GoogleEngineStatus.OK:
+                    {
+                        p.PStatus = ProcessStatus.OK;
+                        break;
+                    }
+                case GoogleEngineStatus.OVER_QUERY_LIMIT:
+                    {
+                        p.PStatus = ProcessStatus.OVER_QUERY_LIMIT;
+                        break;
+                    }
+                case GoogleEngineStatus.REQUEST_DENIED:
+                    {
+                        p.PStatus = ProcessStatus.ERROR;
+                        break;
+                    }
+                case GoogleEngineStatus.UNKNOWN_ERROR:
+                    {
+                        p.PStatus = ProcessStatus.ERROR;
+                        break;
+                    }
+                case GoogleEngineStatus.ZERO_RESULTS:
+                    {
+                        p.PStatus = ProcessStatus.EMPTY;
+                        break;
+                    }
+            }
+
+            /* Запис відповіді пошукової машини */
             XmlSerializer serializer = new XmlSerializer(typeof(GeocodeResponse));
             using (StringWriter textWriter = new StringWriter())
             {
                 serializer.Serialize(textWriter, message);
-                Point.Xml = textWriter.ToString();
+                p.Xml = textWriter.ToString();
             }
-            return Point;
+            return p;
         }
 
         private void SetError(string ErrorType, Exception ex)

@@ -25,7 +25,7 @@ namespace DataModels
 	/// <summary>
 	/// Database       : geolocation
 	/// Data Source    : MO-726-001
-	/// Server Version : 13.00.4446
+	/// Server Version : 13.00.4451
 	/// </summary>
 	public partial class GeolocationDB : LinqToDB.Data.DataConnection
 	{
@@ -41,6 +41,7 @@ namespace DataModels
 		public ITable<List>                     Lists                    { get { return this.GetTable<List>(); } }
 		public ITable<ListAddress>              ListAddress              { get { return this.GetTable<ListAddress>(); } }
 		public ITable<ListStatus>               ListStatus               { get { return this.GetTable<ListStatus>(); } }
+		public ITable<OsmPoints>                OsmPoints                { get { return this.GetTable<OsmPoints>(); } }
 		public ITable<VCustomerPositions>       VCustomerPositions       { get { return this.GetTable<VCustomerPositions>(); } }
 
 		public GeolocationDB()
@@ -359,6 +360,31 @@ namespace DataModels
 		#endregion
 	}
 
+	[Table(Schema="dbo", Name="osm_points")]
+	public partial class OsmPoints
+	{
+		[Column(@"osm_id"),            Nullable] public string OsmId           { get; set; } // nvarchar(50)
+		[Column(@"customer_point_id"), Nullable] public long?  CustomerPointId { get; set; } // bigint
+		[Column(@"house_number"),      Nullable] public string HouseNumber     { get; set; } // nvarchar(255)
+		[Column(@"road"),              Nullable] public string Road            { get; set; } // nvarchar(255)
+		[Column(@"village"),           Nullable] public string Village         { get; set; } // nvarchar(255)
+		[Column(@"town"),              Nullable] public string Town            { get; set; } // nvarchar(255)
+		[Column(@"city"),              Nullable] public string City            { get; set; } // nvarchar(255)
+		[Column(@"county"),            Nullable] public string County          { get; set; } // nvarchar(255)
+		[Column(@"postcode"),          Nullable] public string Postcode        { get; set; } // nvarchar(255)
+		[Column(@"country"),           Nullable] public string Country         { get; set; } // nvarchar(255)
+		[Column(@"country_code"),      Nullable] public string CountryCode     { get; set; } // nvarchar(255)
+		[Column(@"place_id"),          Nullable] public string PlaceId         { get; set; } // nvarchar(255)
+		[Column(@"osm_type"),          Nullable] public string OsmType         { get; set; } // nvarchar(255)
+		[Column(@"boundingbox"),       Nullable] public string Boundingbox     { get; set; } // nvarchar(255)
+		[Column(@"polygonpoints"),     Nullable] public string Polygonpoints   { get; set; } // nvarchar(255)
+		[Column(@"lat"),               Nullable] public string Lat             { get; set; } // nvarchar(255)
+		[Column(@"lon"),               Nullable] public string Lon             { get; set; } // nvarchar(255)
+		[Column(@"display_name"),      Nullable] public string DisplayName     { get; set; } // nvarchar(255)
+		[Column(@"_class"),            Nullable] public string Class           { get; set; } // nvarchar(255)
+		[Column(@"type"),              Nullable] public string Type            { get; set; } // nvarchar(255)
+	}
+
 	[Table(Schema="dbo", Name="v_customer_positions", IsView=true)]
 	public partial class VCustomerPositions
 	{
@@ -390,31 +416,6 @@ namespace DataModels
 		{
 			public long   card_id        { get; set; }
 			public string source_address { get; set; }
-		}
-
-		#endregion
-
-		#region GetUnverifiedAddress
-
-		public static IEnumerable<GetUnverifiedAddressResult> GetUnverifiedAddress(this DataConnection dataConnection)
-		{
-			var ms = dataConnection.MappingSchema;
-
-			return dataConnection.QueryProc(dataReader =>
-				new GetUnverifiedAddressResult
-				{
-					crm_customer_id = Converter.ChangeTypeTo<long?> (dataReader.GetValue(0), ms),
-					adress          = Converter.ChangeTypeTo<string>(dataReader.GetValue(1), ms),
-					Column3         = Converter.ChangeTypeTo<long?> (dataReader.GetValue(2), ms),
-				},
-				"[calc].[GetUnverifiedAddress]");
-		}
-
-		public partial class GetUnverifiedAddressResult
-		{
-			              public long?  crm_customer_id { get; set; }
-			              public string adress          { get; set; }
-			[Column(@"")] public long?  Column3         { get; set; }
 		}
 
 		#endregion
@@ -489,6 +490,29 @@ namespace DataModels
 			public string   search_engine_status { get; set; }
 			public string   formatted_address    { get; set; }
 			public decimal? km                   { get; set; }
+		}
+
+		#endregion
+
+		#region PGetUnverifiedAddress
+
+		public static IEnumerable<PGetUnverifiedAddressResult> PGetUnverifiedAddress(this DataConnection dataConnection)
+		{
+			return dataConnection.QueryProc<PGetUnverifiedAddressResult>("[calc].[P_GetUnverifiedAddress]");
+		}
+
+		public partial class PGetUnverifiedAddressResult
+		{
+			public long?  crm_customer_id   { get; set; }
+			public string adress            { get; set; }
+			public long?  pointId           { get; set; }
+			public string processing_status { get; set; }
+			public long?  card_id           { get; set; }
+			public string region            { get; set; }
+			public string district          { get; set; }
+			public string city              { get; set; }
+			public string street            { get; set; }
+			public string house_number      { get; set; }
 		}
 
 		#endregion

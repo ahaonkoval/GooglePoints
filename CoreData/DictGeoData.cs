@@ -5,10 +5,11 @@ using System.Data.SqlTypes;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Core;
-using Core.Objects;
+//using Core;
+//using Core.Objects;
 using LinqToDB;
 using Microsoft.SqlServer.Types;
+using DataModels;
 
 namespace CoreData
 {
@@ -19,6 +20,37 @@ namespace CoreData
             get
             {
                 return ConfigurationManager.AppSettings["DbConnectString"];
+            }
+        }
+
+        public int GetGoogleRemainingAttemptsCount()
+        {
+            using (var db = new GeolocationDB())
+            {
+                int AttemptQty = 0;
+                long limitId = 0;
+                db.BeginTransaction();
+                var l = db.GoogleRequestLimit.Where(w => w.DateRequest.Value.ToString("yyyy-MM-ddd") == DateTime.Now.ToString("yyyy-MM-ddd")).FirstOrDefault();
+                if (l == null)
+                {
+                    AttemptQty = 2500;
+                    object id = db.GoogleRequestLimit.InsertWithIdentity(() => new GoogleRequestLimit
+                    {
+                        Limit = AttemptQty,
+                        DateRequest = DateTime.Now
+                    });
+                    limitId = Convert.ToInt64(id);
+                }
+                else
+                {
+                    AttemptQty = l.Limit.Value;
+                    limitId = l.GoogleRequestLimitId;
+                }
+                db.GoogleRequestLimit.Where(w => w.GoogleRequestLimitId == limitId)
+                    .Set(p => p.Limit, AttemptQty - 1).Update();
+                db.CommitTransaction();
+
+                return AttemptQty;
             }
         }
         public long SetDistrict(long potamus_district_id, long region_id, string name, string poligon)

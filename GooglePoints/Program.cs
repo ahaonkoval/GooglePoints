@@ -15,25 +15,28 @@ using CoreData;
 using Core.Searchers;
 using Core.ObjectSerializer;
 using Core.Objects;
+using Core.Helpers;
 
 namespace GooglePoints
 {
     class Program
     {
-        //CoreGooglePoints cgp = new CoreGooglePoints();
+        //GooglePointsSearcher cgp = new GooglePointsSearcher();
         
         static void Main(string[] args)
         {
-            WebClientExtended client = new WebClientExtended();
-            string url = "http://nominatim.openstreetmap.org/search?q=Хмельницький вулиця Свободи 16а&format=xml";
+            Tst t = new Tst();
+            t.TestOne();
+            //WebClientExtended client = new WebClientExtended();
+            //string url = "http://nominatim.openstreetmap.org/search?q=Хмельницький вулиця Свободи 16а&format=xml";
 
-            string st = System.Text.Encoding.UTF8.GetString(client.DownloadData(url));
-            XmlSerializer serializer = new XmlSerializer(typeof(Searchresults));
+            //string st = System.Text.Encoding.UTF8.GetString(client.DownloadData(url));
+            //XmlSerializer serializer = new XmlSerializer(typeof(Searchresults));
 
-            using (TextReader tr = new StringReader(st))
-            {
-                Searchresults result = (Searchresults)serializer.Deserialize(tr);
-            }
+            //using (TextReader tr = new StringReader(st))
+            //{
+            //    Searchresults result = (Searchresults)serializer.Deserialize(tr);
+            //}
 
             //Console.WriteLine(result);
 
@@ -77,7 +80,7 @@ namespace GooglePoints
             //}
             //String responseString = reader.ReadToEnd();
 
-            Console.ReadLine();
+            //Console.ReadLine();
 
 
             //XmlSerializer serializer = new XmlSerializer(typeof(GeoObject));
@@ -106,6 +109,71 @@ namespace GooglePoints
             //}
             //Console.WriteLine(poligon);
             //Console.ReadLine();
+        }
+
+        void check() { }
+    }
+
+    public class Tst
+    {
+        HelperDB hdb;
+
+        public Tst()
+        {
+            hdb = new HelperDB();
+        }
+        public void TestOne() {
+            ProcessPoint point = hdb.GetEpicentrKPointForGeocoding();
+
+            point = this.Get(point);
+        }
+
+        public ProcessPoint Get(ProcessPoint point)
+        {
+
+            WebClientExtended client = new WebClientExtended();
+
+            if (Convert.ToBoolean(ConfigurationManager.AppSettings["isProxy"]))
+            {
+                string Host = ConfigurationManager.AppSettings["ProxyHost"];
+                int Port = Convert.ToInt32(ConfigurationManager.AppSettings["ProxyPort"]);
+                System.Net.WebProxy wp = new System.Net.WebProxy(Host, Port);
+                client.Proxy = wp;
+            }
+
+            string ep = string.Format(ConfigurationManager.AppSettings["OSMApiPath"]);
+            string url = string.Format("{0}{1}&format=xml&addressdetails=1", ep, point.SourceAddress);
+
+            string st = System.Text.Encoding.UTF8.GetString(client.DownloadData(url));
+
+            XmlSerializer serializer = new XmlSerializer(typeof(Searchresults));
+
+            using (TextReader tr = new StringReader(st))
+            {
+                Searchresults result = (Searchresults)serializer.Deserialize(tr);
+                if (result.Place != null)
+                {
+                    point.Coordinate = new Coordinate(result.Place.Lat, result.Place.Lon);
+                    point.FormattedAddress = result.Place.Display_name;
+                    point.SetSearchEngineStatus("OK");
+                    point.Conteiner = (object)result.Place;
+                } else
+                {
+                    point.SetSearchEngineStatus("ZERO_RESULTS");
+                }
+
+                XmlSerializer smr = new XmlSerializer(typeof(Searchresults));
+                using (StringWriter tw = new StringWriter())
+                {
+                    smr.Serialize(tw, result);
+                    point.Xml = tw.ToString();
+                }
+
+
+                point.Save(hdb);
+
+                return point;
+            }            
         }
     }
 }

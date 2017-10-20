@@ -7,8 +7,8 @@
     <ProjectGuid>{25A56482-DD63-469A-8796-87010EA73ABD}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CoordinateFinder</RootNamespace>
-    <AssemblyName>CoordinateFinder</AssemblyName>
+    <RootNamespace>GeoCoordinateSearcher</RootNamespace>
+    <AssemblyName>GeoCoordinateSearcher</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

@@ -13,7 +13,7 @@ using Core;
 using ServiceDebuggerHelper;
 using Core.Searchers;
 
-namespace CoordinateFinder
+namespace GeoCoordinateSearcher
 {
     public partial class ServiceFinder : ServiceBase, IDebuggableService
     {
@@ -25,23 +25,16 @@ namespace CoordinateFinder
 
         protected override void OnStart(string[] args)
         {
-            var interval = Convert.ToInt32(ConfigurationManager.AppSettings["ServiceRunIntervalInSeconds"]);
-            //var yandex_interval = Convert.ToInt32(ConfigurationManager.AppSettings["YandexRunIntervalInSeconds"]);
+            if (Convert.ToBoolean(ConfigurationManager.AppSettings["IsEpicentrKStart"]))
+            {
+                var TimerEpicentrK = new System.Timers.Timer
+                {
+                    Interval = Convert.ToInt32(ConfigurationManager.AppSettings["ServiceRunIntervalInSeconds"])
+                };
+                TimerEpicentrK.Elapsed += OnTimerEpicentrK;
+                TimerEpicentrK.Start();
+            }
 
-            var timer = new System.Timers.Timer {
-                Interval = interval };
-            timer.Elapsed += OnTimer;
-            timer.Start();
-
-            //var yandex_timer = new System.Timers.Timer { Interval = yandex_interval };
-            //yandex_timer.Elapsed += yandex_timer_Elapsed;
-            //yandex_timer.Start();
-        }
-
-        void yandex_timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
-        {
-            //CoreYandexPoints YandexFinder = new CoreYandexPoints();
-            //YandexFinder.GetYandexCoordinates();
         }
 
         protected override void OnStop()
@@ -49,10 +42,19 @@ namespace CoordinateFinder
 
         }
 
-        private void OnTimer(object sender, System.Timers.ElapsedEventArgs e)
+        private void OnTimerEpicentrK(object sender, System.Timers.ElapsedEventArgs e)
         {
-            CoreGooglePoints cgp = new CoreGooglePoints();
-            cgp.GetGooleCoordinates();
+            /*
+             * 1. Беремо адресу покупця епицентра (PointMap)
+             * 2. Перевіряємо Osm, 
+             *      -> нема Перевіряємо Google
+             *          -> нема або закінчилась кількіть спроб -> перевіряємо через Yandex
+             */
+
+           
+
+            GooglePointsSearcher cgp = new GooglePointsSearcher();
+            //cgp.GetGooleCoordinates();
         }
 
         public void Start(string[] args)

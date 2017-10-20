@@ -1,4 +1,4 @@
-﻿namespace ProspectsEmailSender
+﻿namespace GeoCoordinateSearcher
 {
     partial class ProjectInstaller
     {
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.serviceProcessInstaller1 = new System.ServiceProcess.ServiceProcessInstaller();
-            this.EpicentrkCoordinateFinder = new System.ServiceProcess.ServiceInstaller();
+            this.GeoCoordinateSearcher = new System.ServiceProcess.ServiceInstaller();
             // 
             // serviceProcessInstaller1
             // 
@@ -37,15 +37,15 @@
             this.serviceProcessInstaller1.Password = null;
             this.serviceProcessInstaller1.Username = null;
             // 
-            // EpicentrkCoordinateFinder
+            // GeoCoordinateSearcher
             // 
-            this.EpicentrkCoordinateFinder.DisplayName = "Epicentrk Coordinate Finder";
-            this.EpicentrkCoordinateFinder.ServiceName = "EpicentrkCoordinateFinder";
+            this.GeoCoordinateSearcher.DisplayName = "Geo Coordinate Searcher";
+            this.GeoCoordinateSearcher.ServiceName = "GeoCoordinateSearcher";
             // 
             // ProjectInstaller
             // 
             this.Installers.AddRange(new System.Configuration.Install.Installer[] {
-            this.EpicentrkCoordinateFinder,
+            this.GeoCoordinateSearcher,
             this.serviceProcessInstaller1});
 
         }
@@ -53,6 +53,6 @@
         #endregion
 
         private System.ServiceProcess.ServiceProcessInstaller serviceProcessInstaller1;
-        private System.ServiceProcess.ServiceInstaller EpicentrkCoordinateFinder;
+        private System.ServiceProcess.ServiceInstaller GeoCoordinateSearcher;
     }
 }

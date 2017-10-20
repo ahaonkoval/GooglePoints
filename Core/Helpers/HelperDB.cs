@@ -8,7 +8,8 @@ using System.Data.SqlClient;
 using System.Configuration;
 using NLog;
 using Core.Objects;
-
+using CoreData;
+using DataModels;
 
 namespace Core.Helpers
 {
@@ -20,10 +21,22 @@ namespace Core.Helpers
         /// 
         /// </summary>
         /// <returns></returns>
-        public PointMap GetEpicentrKPointForGeocoding()
+        public ProcessPoint GetEpicentrKPointForGeocoding()
         {
             //TODO пишемо запит в БД через храниму процедуру gpo.get_unchecked_address
-            PointMap Point = new PointMap();
+            //PointMap Point = new PointMap();
+
+            using (DictEpicetnrK edict = new DictEpicetnrK())
+            {
+                GeolocationDBStoredProcedures.PGetUnverifiedAddressResult re = edict.GetUnverifiedAddress();
+                return new ProcessPoint {
+                    PointId = re.pointId.Value,
+                    CardId = re.card_id.Value,
+                    CrmCustomerId = re.crm_customer_id.Value,
+                    SourceAddress = re.adress,
+                    Type = PointType.CustomerEpicentrK
+                };
+            }
 
 
 
@@ -56,52 +69,115 @@ namespace Core.Helpers
             //    }
             //}
 
-            return Point;
+            //return Point;
         }
 
-        public void SetEpicentrKPoint(PointMap Point)
+        public void SetEpicentrKPoint(ProcessPoint p)
         {
-            string DbConnectString = ConfigurationManager.AppSettings["DbConnectString"];
-
-            using (SqlConnection connect = new SqlConnection(DbConnectString))
+            using (DictEpicetnrK edict = new DictEpicetnrK())
             {
-                SqlCommand cmd = connect.CreateCommand();
-                cmd.CommandText = "dbo.set_point_address";
-                cmd.CommandType = CommandType.StoredProcedure;
-
-                string Latitude = Point.Coordinate == null ? string.Empty : Point.Coordinate.Lat;
-                string Longitude = Point.Coordinate == null ? string.Empty : Point.Coordinate.Lng;
-
-                cmd.Parameters.AddWithValue("@card_id", Point.CardId);
-                cmd.Parameters.AddWithValue("@lat", Latitude);
-                cmd.Parameters.AddWithValue("@lng", Longitude);
-                cmd.Parameters.AddWithValue("@google_status", Point.Status.ToString());
-                cmd.Parameters.AddWithValue("@formatted_address", Point.FormattedAddress);
-                cmd.Parameters.AddWithValue("@xml", Point.Xml);
-
-                try
+                if (p.Coordinate!= null)
                 {
-                    cmd.Connection.Open();
-                    cmd.ExecuteNonQuery();
-                    cmd.Connection.Close();
-                }
-                catch (Exception ex)
+                    edict.SetEpicentrKPoint(
+                        p.PointId,
+                        p.CardId,
+                        p.CrmCustomerId,
+                        p.GetSearchEngineStatus(),
+                        p.FormattedAddress,
+                        p.Xml,
+                        p.Coordinate.Lat,
+                        p.Coordinate.Lng
+                        );
+
+                    if (p.SearchEngine == SearchEngine.Osm)
+                    {
+                        Core.ObjectSerializer.Place place = (Core.ObjectSerializer.Place)p.Conteiner;
+
+                        edict.SetOsmPoint(
+                            place.Osm_id,
+                            p.PointId,
+                            place.House_number,
+                            place.Road,
+                            place.Village,
+                            place.Town,
+                            place.City,
+                            place.County,
+                            place.Postcode,
+                            place.Country,
+                            place.Country_code,
+                            place.Place_id,
+                            place.Osm_type,
+                            place.Boundingbox,
+                            place.Polygonpoints,
+                            place.Lat,
+                            place.Lon,
+                            place.Display_name,
+                            place.Class,
+                            place.Type
+                        );
+                    }
+                } else
                 {
-                    SetError("Ошибка сохранения точки в БД", ex);
-                }
-                finally
-                {
-                    if (connect.State != ConnectionState.Closed) connect.Close();
+                    edict.SetEpicentrKPoint(
+                        p.PointId,
+                        p.CardId,
+                        p.CrmCustomerId,
+                        p.GetSearchEngineStatus(),
+                        p.FormattedAddress,
+                        p.Xml
+                        );
                 }
             }
+
+            //string DbConnectString = ConfigurationManager.AppSettings["DbConnectString"];
+
+            //using (SqlConnection connect = new SqlConnection(DbConnectString))
+            //{
+            //    SqlCommand cmd = connect.CreateCommand();
+            //    cmd.CommandText = "dbo.set_point_address";
+            //    cmd.CommandType = CommandType.StoredProcedure;
+
+            //    string Latitude = Point.Coordinate == null ? string.Empty : Point.Coordinate.Lat;
+            //    string Longitude = Point.Coordinate == null ? string.Empty : Point.Coordinate.Lng;
+
+            //    cmd.Parameters.AddWithValue("@card_id", Point.CardId);
+            //    cmd.Parameters.AddWithValue("@lat", Latitude);
+            //    cmd.Parameters.AddWithValue("@lng", Longitude);
+            //    cmd.Parameters.AddWithValue("@google_status", Point.Status.ToString());
+            //    cmd.Parameters.AddWithValue("@formatted_address", Point.FormattedAddress);
+            //    cmd.Parameters.AddWithValue("@xml", Point.Xml);
+
+            //    try
+            //    {
+            //        cmd.Connection.Open();
+            //        cmd.ExecuteNonQuery();
+            //        cmd.Connection.Close();
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        SetError("Ошибка сохранения точки в БД", ex);
+            //    }
+            //    finally
+            //    {
+            //        if (connect.State != ConnectionState.Closed) connect.Close();
+            //    }
+            //}
         }
         #endregion
 
+        public int GetRemainingAttemptsCount()
+        {
+            using (DictGeoData dict = new DictGeoData())
+            {
+                return dict.GetGoogleRemainingAttemptsCount();
+            }
+        }
+
         #region New Line
 
-        public PointMap GetNewLinePointForGeocoding()
+        public ProcessPoint GetNewLinePointForGeocoding()
         {
-            PointMap Point = new PointMap();
+            ProcessPoint Point = new ProcessPoint();
             string DbConnectString = ConfigurationManager.AppSettings["DbConnectString"];
             using (SqlConnection connect = new SqlConnection(DbConnectString))
             {
@@ -138,7 +214,7 @@ namespace Core.Helpers
             return Point;
         }
 
-        public void SetNewLinePoint(PointMap Point)
+        public void SetNewLinePoint(ProcessPoint Point)
         {
             string DbConnectString = ConfigurationManager.AppSettings["DbConnectString"];
 
@@ -154,7 +230,7 @@ namespace Core.Helpers
                 cmd.Parameters.AddWithValue("@geo_customer_id", Point.CardId);
                 cmd.Parameters.AddWithValue("@lat", Latitude);
                 cmd.Parameters.AddWithValue("@lng", Longitude);
-                cmd.Parameters.AddWithValue("@google_status", Point.Status.ToString());
+                cmd.Parameters.AddWithValue("@google_status", Point.PStatus.ToString());
                 cmd.Parameters.AddWithValue("@formatted_address", Point.FormattedAddress == null ? "" : Point.FormattedAddress);
                 cmd.Parameters.Add("@xml", SqlDbType.VarChar, 8000).Value = Point.Xml;
 
@@ -332,7 +408,7 @@ namespace Core.Helpers
         public void GetPointsByListId(int list_id)
         {
             //TODO пишемо запит в БД через храниму процедуру gpo.get_unchecked_address
-            PointMap Point = new PointMap();
+            ProcessPoint Point = new ProcessPoint();
             Point.Type = PointType.CustomerEpicentrK;
             string DbConnectString = ConfigurationManager.AppSettings["DbConnectString"];
 

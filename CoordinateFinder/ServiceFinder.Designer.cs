@@ -1,4 +1,4 @@
-﻿namespace CoordinateFinder
+﻿namespace GeoCoordinateSearcher
 {
     partial class ServiceFinder
     {

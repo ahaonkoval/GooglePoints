@@ -20,7 +20,7 @@ namespace Core.Searchers
             hyandex = new HelperYandex();
         }
         public void GetYandexCoordinates() {
-            PointMap Point = hdb.GetNewLinePointForGeocoding();
+            ProcessPoint Point = hdb.GetNewLinePointForGeocoding();
             Point.Type = PointType.CustomerNewLine;
 
             _logger.Info(string.Format("{0} {1} {2}", Point.CardId.ToString(), "Address Get DB for check Yandex:", Point.SourceAddress));
@@ -32,7 +32,7 @@ namespace Core.Searchers
                 Point.FormattedAddress,
                 Point.Coordinate != null ? Point.Coordinate.Lat : "none",
                 Point.Coordinate != null ? Point.Coordinate.Lng : "none",
-                Point.Status.ToString()
+                Point.PStatus.ToString()
             ));
             if (Point.CardId > 0)
             {

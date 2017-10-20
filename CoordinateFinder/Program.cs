@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using ServiceDebuggerHelper;
 
-namespace CoordinateFinder
+namespace GeoCoordinateSearcher
 {
     static class Program
     {

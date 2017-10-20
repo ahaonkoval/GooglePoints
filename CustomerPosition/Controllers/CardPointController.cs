@@ -47,7 +47,14 @@ namespace CustomerPosition.Controllers
             var distance = parameters.Where(o => o.Key == "distance").FirstOrDefault();
 
             DictEpicetnrK dict = new DictEpicetnrK();
-            return dict.GetPointsByMarketId(id);
+            return dict.GetPointsByMarketId(id).Select(x => new CardPoint
+            {
+                formatted_address = x.FormattedAddress,
+                lat = x.Lat.Value,
+                lng = x.Lng.Value,
+                point_id = x.PointId.Value,
+                search_engine_status = x.SearchEngineStatus
+            }); 
         }
 
         public IEnumerable<CardPoint> GetPointsByMarketRadius(int id)
@@ -57,7 +64,14 @@ namespace CustomerPosition.Controllers
 
             using (DictEpicetnrK dict = new DictEpicetnrK())
             {
-                return dict.GetPointsByMarketRadius(id, Convert.ToInt32(radius.Value));
+                return dict.GetPointsByMarketRadius(id, Convert.ToInt32(radius.Value))
+                    .Select(x => new CardPoint {
+                        formatted_address = x.formatted_address,
+                        lat = x.lat.Value,
+                        lng = x.lng.Value,
+                        point_id = x.point_id.Value,
+                        search_engine_status = x.search_engine_status
+                    });
             }
         }
 

@@ -16,7 +16,7 @@ namespace Core.Helpers
     {
         private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-        public PointMap GetRequestXmlDocumentPointsByAddress(PointMap Point)
+        public ProcessPoint GetRequestXmlDocumentPointsByAddress(ProcessPoint Point)
         {
             try
             {
@@ -71,9 +71,9 @@ namespace Core.Helpers
 
                         if (Point.Coordinate != null)
                         {
-                            Point.Status = GoogleEngineStatus.OK;
+                            Point.PStatus = ProcessStatus.OK;
                         } else {
-                            Point.Status = GoogleEngineStatus.ZERO_RESULTS;
+                            Point.PStatus = ProcessStatus.EMPTY;
                         }
                     }
                     return Point;

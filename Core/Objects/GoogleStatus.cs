@@ -24,9 +24,38 @@ namespace Core.Objects
         MORE_ONE_POINT = 7
     };
 
+    public enum YandexEngineStatusP
+    {
+        OK = 1,
+        EMPTY = 2,
+        OVER_QUERY_LIMIT = 3,
+        ERROR = 6,
+        MORE_ONE_POINT = 7
+    }
+
+    public enum OSREngineStatus
+    {
+        OK = 1,
+        EMPTY = 2,
+        OVER_QUERY_LIMIT = 3,
+        ERROR = 6,
+        MORE_ONE_POINT = 7
+    }
+
+    public enum ProcessStatus
+    {
+        OK = 1,
+        EMPTY = 2,
+        OVER_QUERY_LIMIT = 3,
+        ERROR = 6,
+        MORE_ONE_POINT = 7,
+        ATTEMTS_TO_END = 8
+    }
+
     public enum SearchEngines
     {
         Google = 1,
-        OSM = 2
+        OSM = 2,
+        Yandex = 3
     }
 }

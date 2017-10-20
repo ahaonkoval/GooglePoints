@@ -1,4 +1,5 @@
 ﻿using Core.Helpers;
+using Core.Objects;
 using NLog;
 using System;
 using System.Collections.Generic;
@@ -8,16 +9,21 @@ using System.Threading.Tasks;
 
 namespace Core.Searchers
 {
-    public class CoreOsmPoints : IDisposable
+    public class OsmPointsSearcher : IDisposable
     {
 
         HelperDB hdb;
-        //HelperGoogle hgoogle;
+        //HelperGoogle hgoogle; OsmPointsSearcher
         private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-        public CoreOsmPoints()
+        public OsmPointsSearcher()
         {
 
+        }
+
+        public ProcessPoint IdentifyCoordinatePoint(ProcessPoint point)
+        {
+            return point;
         }
 
         #region IDisposable Support

@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 using System.Data;
 using System.Data.SqlClient;
 using System.Configuration;
-using Core;
-using Core.Objects;
+//using Core;
+//using Core.Objects;
 using LinqToDB;
 using Microsoft.SqlServer.Types;
 using System.Data.SqlTypes;
+using DataModels;
 
 /*
  * работаем с данными по Епицентру (адреса, точки и так далее...)
@@ -26,7 +27,6 @@ namespace CoreData
                 return ConfigurationManager.AppSettings["DbConnectString"];
             }
         }
- 
         /// <summary>
         /// 
         /// </summary>
@@ -130,20 +130,20 @@ namespace CoreData
         /// </summary>
         /// <param name="market_id"></param>
         /// <returns></returns>
-        public IEnumerable<CardPoint> GetPointsByMarketId(int market_id)
+        public IEnumerable<DataModels.VCustomerPositions> GetPointsByMarketId(int market_id)
         {
             using (var db = new DataModels.GeolocationDB())
             {
                 //var market = db.DictTradeMarkets.Where(w => w.MarketId == market_id).FirstOrDefault();
 
-                return db.VCustomerPositions.Where(w => w.IssuedMarketId == market_id && w.SearchEngineStatus == "OK")
-                    .Select(x => new CardPoint {
-                        formatted_address = x.FormattedAddress,
-                        lat = x.Lat.Value,
-                        lng = x.Lng.Value,
-                        point_id = x.PointId.Value,
-                        search_engine_status = x.SearchEngineStatus
-                });
+                return db.VCustomerPositions.Where(w => w.IssuedMarketId == market_id && w.SearchEngineStatus == "OK").ToList();
+                //    .Select(x => new CardPoint {
+                //        formatted_address = x.FormattedAddress,
+                //        lat = x.Lat.Value,
+                //        lng = x.Lng.Value,
+                //        point_id = x.PointId.Value,
+                //        search_engine_status = x.SearchEngineStatus
+                //});
             }
             /*
             List<CardPoint> cardpoints = new List<CardPoint>();
@@ -200,29 +200,29 @@ namespace CoreData
             */
         }
 
-        public IEnumerable<CardPoint> GetPointsByMarketRadius(int market_id, int radius)
+        public IEnumerable<GeolocationDBStoredProcedures.PGetPointsByMarketRadiusResult> GetPointsByMarketRadius(int market_id, int radius)
         {
-            List<CardPoint> cp = new List<CardPoint>();
+            //List<CardPoint> cp = new List<CardPoint>();
             using (var db = new DataModels.GeolocationDB())
             {
                 LinqToDB.Data.DataConnection connect = new LinqToDB.Data.DataConnection();
                 IEnumerable<DataModels.GeolocationDBStoredProcedures.PGetPointsByMarketRadiusResult> re = 
                     (IEnumerable<DataModels.GeolocationDBStoredProcedures.PGetPointsByMarketRadiusResult>)
                         DataModels.GeolocationDBStoredProcedures.PGetPointsByMarketRadius(connect, market_id, radius).ToList();
-                if (re.Count() > 0)
-                {                   
-                    foreach (DataModels.GeolocationDBStoredProcedures.PGetPointsByMarketRadiusResult r in re)
-                    {
-                        cp.Add(new CardPoint {
-                            formatted_address = r.formatted_address,
-                            lat = r.lat.Value,
-                            lng = r.lng.Value,
-                            point_id = r.point_id.Value,
-                            search_engine_status = r.search_engine_status
-                        });
-                    }                   
-                }
-                return cp;
+                //if (re.Count() > 0)
+                //{                   
+                //    foreach (DataModels.GeolocationDBStoredProcedures.PGetPointsByMarketRadiusResult r in re)
+                //    {
+                //        cp.Add(new CardPoint {
+                //            formatted_address = r.formatted_address,
+                //            lat = r.lat.Value,
+                //            lng = r.lng.Value,
+                //            point_id = r.point_id.Value,
+                //            search_engine_status = r.search_engine_status
+                //        });
+                //    }                   
+                //}
+                return re;
             }
 
              
@@ -288,6 +288,84 @@ namespace CoreData
             //return CardCount;
         }
 
+        public GeolocationDBStoredProcedures.PGetUnverifiedAddressResult GetUnverifiedAddress()
+        {
+            using (var db = new DataModels.GeolocationDB())
+            {
+                LinqToDB.Data.DataConnection connect = new LinqToDB.Data.DataConnection();
+                GeolocationDBStoredProcedures.PGetUnverifiedAddressResult re =
+                    DataModels.GeolocationDBStoredProcedures.PGetUnverifiedAddress(connect).FirstOrDefault();
+                return re;
+            }
+        }
+
+        #region SET
+
+        public void SetEpicentrKPoint(
+            long pointId, long cardId, long crmCustomersId, string searchEngineStatus, string formattedAddress, string xml, string lat, string lng)
+        {
+            using (var db = new GeolocationDB())
+            {
+                db.CustomersPositions.Where(w => w.PointId == pointId)
+                    .Set(o => o.CardId, cardId)
+                    .Set(o => o.CrmCustomerId, crmCustomersId)
+                    .Set(o => o.SearchEngineStatus, searchEngineStatus)
+                    .Set(o => o.FormattedAddress, formattedAddress)
+                    .Set(o => o.Xml, xml)
+                    .Set(o => o.Lat, Convert.ToDecimal(lat.Replace(".", ",")))
+                    .Set(o => o.Lng, Convert.ToDecimal(lng.Replace(".", ",")))
+                    .Update();
+            }
+        }
+
+        public void SetEpicentrKPoint(
+            long pointId, long cardId, long crmCustomersId, string searchEngineStatus, string formattedAddress, string xml)
+        {
+            using (var db = new GeolocationDB())
+            {
+                db.CustomersPositions.Where(w => w.PointId == pointId)
+                    .Set(o => o.CardId, cardId)
+                    .Set(o => o.CrmCustomerId, crmCustomersId)
+                    .Set(o => o.SearchEngineStatus, searchEngineStatus)
+                    .Set(o => o.Xml, xml.ToString())
+                    .Update();
+            }
+        }
+
+        public void SetOsmPoint(long OsmId, long CustomerPointId, string HouseNumber, string Road, string Village, string Town,
+                    string City, string County, string PostCode, string Country, string CountryCode, string PlaceId,
+                    string OsmType, string Boundingbox, string PolygonPoints, string Lat, string Lon, string DisplayName,
+                    string _Class, string Type)
+        {
+            using (var db = new GeolocationDB())
+            {
+                db.OsmPoints.Insert(() => new DataModels.OsmPoints {
+                    Boundingbox = Boundingbox,
+                    City = City,
+                    Class = _Class,
+                    Country = Country,
+                    CountryCode = CountryCode,
+                    County = County,
+                    CustomerPointId = CustomerPointId,
+                    DisplayName = DisplayName,
+                    HouseNumber = HouseNumber,
+                    Lat = Lat,
+                    Lon = Lon,
+                    OsmId = OsmId.ToString(),
+                    OsmType = OsmType,
+                    PlaceId = PlaceId,
+                    Polygonpoints = PolygonPoints,
+                    Postcode = PostCode,
+                    Road = Road,
+                    Town = Town,
+                    Type = Type,
+                    Village = Village
+                });
+            }
+        }
+
+        #endregion
+
         //public List<Dict> GetSegmentByVisited()
         //{
         //    List<Dict> visits = new List<Dict>();
@@ -326,16 +404,16 @@ namespace CoreData
         //        cmd.CommandText = @"
         //            select 
         //                c.google_point_id,
-	       //             c.lat,
-	       //             c.lng,
+        //             c.lat,
+        //             c.lng,
         //                c.google_status,
-	       //             c.formatted_address
+        //             c.formatted_address
         //            from [dbo].[crm_isviber] a 
         //            inner join [dbo].[v_card_customers_true] b on a.card_id = b.card_id
         //            inner join geolocation..google_card_points c on a.card_id = c.card_id
         //            where
-	       //             b.name_city is not null
-	       //             and c.google_status = 'OK'
+        //             b.name_city is not null
+        //             and c.google_status = 'OK'
         //        ";
         //        cmd.CommandType = CommandType.Text;
 
