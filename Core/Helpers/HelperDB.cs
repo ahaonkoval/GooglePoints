@@ -29,13 +29,19 @@ namespace Core.Helpers
             using (DictEpicetnrK edict = new DictEpicetnrK())
             {
                 GeolocationDBStoredProcedures.PGetUnverifiedAddressResult re = edict.GetUnverifiedAddress();
-                return new ProcessPoint {
-                    PointId = re.pointId.Value,
-                    CardId = re.card_id.Value,
-                    CrmCustomerId = re.crm_customer_id.Value,
-                    SourceAddress = re.adress,
-                    Type = PointType.CustomerEpicentrK
-                };
+
+                if (re != null)
+                {
+                    return new ProcessPoint
+                    {
+                        PointId = re.pointId.Value,
+                        CardId = re.card_id.Value,
+                        CrmCustomerId = re.crm_customer_id.Value,
+                        SourceAddress = re.adress,
+                        Type = PointType.CustomerEpicentrK
+                    };
+                }
+                else return null;
             }
 
 

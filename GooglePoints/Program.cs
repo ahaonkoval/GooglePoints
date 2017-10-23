@@ -157,6 +157,7 @@ namespace GooglePoints
                     point.FormattedAddress = result.Place.Display_name;
                     point.SetSearchEngineStatus("OK");
                     point.Conteiner = (object)result.Place;
+                    point.SearchEngine = SearchEngine.Osm;
                 } else
                 {
                     point.SetSearchEngineStatus("ZERO_RESULTS");

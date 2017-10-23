@@ -332,7 +332,7 @@ namespace CoreData
             }
         }
 
-        public void SetOsmPoint(long OsmId, long CustomerPointId, string HouseNumber, string Road, string Village, string Town,
+        public void SetOsmPoint(string OsmId, long CustomerPointId, string HouseNumber, string Road, string Village, string Town,
                     string City, string County, string PostCode, string Country, string CountryCode, string PlaceId,
                     string OsmType, string Boundingbox, string PolygonPoints, string Lat, string Lon, string DisplayName,
                     string _Class, string Type)
@@ -351,7 +351,7 @@ namespace CoreData
                     HouseNumber = HouseNumber,
                     Lat = Lat,
                     Lon = Lon,
-                    OsmId = OsmId.ToString(),
+                    OsmId = OsmId,
                     OsmType = OsmType,
                     PlaceId = PlaceId,
                     Polygonpoints = PolygonPoints,

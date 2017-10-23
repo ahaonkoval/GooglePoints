@@ -21,6 +21,18 @@ namespace Core.Searchers
             hgoogle = new HelperGoogle();
         }
 
+        public GooglePointsSearcher(HelperDB _hdb)
+        {
+            if (_hdb == null)
+            {
+                hdb = new HelperDB();
+            } else
+            {
+                hdb = _hdb;
+            }
+            hgoogle = new HelperGoogle();
+        }
+
         public GooglePointsSearcher(ProcessPoint point)
         {
             hdb = new HelperDB();
@@ -32,9 +44,12 @@ namespace Core.Searchers
             if (GetRemainingAttemptsCount() <= 0) {
                 point.PStatus = ProcessStatus.ATTEMTS_TO_END;
                 return point;
-            }
+            }            
 
-            _logger.Info(string.Format("{0} {1} {2}", point.CardId.ToString(), "Address Get DB:", point.SourceAddress));
+            if (point != null)
+            {
+                _logger.Info(string.Format("{0} {1} {2}", point.CardId.ToString(), "Address Get DB:", point.SourceAddress));                
+            }
 
             point = hgoogle.GetRequestXmlDocumentPointsByAddress(point);
 

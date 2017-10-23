@@ -64,7 +64,8 @@ namespace Core.Helpers
 
         private ProcessPoint ProcessingRequestResult(ProcessPoint p, GeocodeResponse message)
         {
-            GoogleEngineStatus status = (GoogleEngineStatus)Enum.Parse(typeof(GoogleEngineStatus), message.status);            
+            GoogleEngineStatus status = (GoogleEngineStatus)Enum.Parse(typeof(GoogleEngineStatus), message.status);
+            p.SearchEngine = SearchEngine.Google;        
 
             Coordinate GeoPoint = null;
 

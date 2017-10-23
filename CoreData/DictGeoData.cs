@@ -30,7 +30,14 @@ namespace CoreData
                 int AttemptQty = 0;
                 long limitId = 0;
                 db.BeginTransaction();
-                var l = db.GoogleRequestLimit.Where(w => w.DateRequest.Value.ToString("yyyy-MM-ddd") == DateTime.Now.ToString("yyyy-MM-ddd")).FirstOrDefault();
+
+                //ar l = db.GoogleRequestLimit.ToList();
+
+                //var a = 
+                var l = db.GoogleRequestLimit.Where(
+                        w => w.DateRequest.Equals(DateTime.Now.Date)//ToString("yyyy-MM-ddd")
+                    ).FirstOrDefault();
+
                 if (l == null)
                 {
                     AttemptQty = 2500;
@@ -45,9 +52,12 @@ namespace CoreData
                 {
                     AttemptQty = l.Limit.Value;
                     limitId = l.GoogleRequestLimitId;
+
+                    if (AttemptQty > 0)
+                        db.GoogleRequestLimit.Where(w => w.GoogleRequestLimitId == limitId)
+                            .Set(p => p.Limit, AttemptQty - 1).Update();
                 }
-                db.GoogleRequestLimit.Where(w => w.GoogleRequestLimitId == limitId)
-                    .Set(p => p.Limit, AttemptQty - 1).Update();
+
                 db.CommitTransaction();
 
                 return AttemptQty;
