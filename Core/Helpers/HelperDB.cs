@@ -92,7 +92,7 @@ namespace Core.Helpers
                         p.FormattedAddress,
                         p.Xml,
                         p.Coordinate.Lat,
-                        p.Coordinate.Lng
+                        p.Coordinate.Lng                        
                         );
 
                     if (p.SearchEngine == SearchEngine.Osm)

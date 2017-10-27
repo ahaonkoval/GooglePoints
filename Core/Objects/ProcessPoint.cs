@@ -116,6 +116,6 @@ namespace Core.Objects
     public enum SearchEngine {
         Google = 0,
         Osm = 1,
-        Yzndex = 2
+        Yandex = 2
     }
 }

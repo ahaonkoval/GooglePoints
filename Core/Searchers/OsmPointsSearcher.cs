@@ -65,7 +65,8 @@ namespace Core.Searchers
                     point.FormattedAddress = result.Place.Display_name;
                     point.SetSearchEngineStatus("OK");
                     point.Conteiner = (object)result.Place;
-                    point.SearchEngine = SearchEngine.Osm;                    
+                    point.SearchEngine = SearchEngine.Osm;
+                    //point.PStatus = ProcessStatus.;
                 }
                 else
                 {

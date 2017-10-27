@@ -314,6 +314,7 @@ namespace CoreData
                     .Set(o => o.Xml, xml)
                     .Set(o => o.Lat, Convert.ToDecimal(lat.Replace(".", ",")))
                     .Set(o => o.Lng, Convert.ToDecimal(lng.Replace(".", ",")))
+                    .Set(o => o.ProcessingStatus, "COMPLETED")
                     .Update();
             }
         }

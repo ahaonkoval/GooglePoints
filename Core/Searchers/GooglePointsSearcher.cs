@@ -48,10 +48,11 @@ namespace Core.Searchers
 
             if (point != null)
             {
-                _logger.Info(string.Format("{0} {1} {2}", point.CardId.ToString(), "Address Get DB:", point.SourceAddress));                
+                _logger.Info(string.Format("{0} {1} {2}", point.CardId.ToString(), "Address Get DB:", point.SourceAddress));         
             }
 
             point = hgoogle.GetRequestXmlDocumentPointsByAddress(point);
+            point.SearchEngine = SearchEngine.Google;
 
             _logger.Info(string.Format("{0} SearchEngineStatus:{5}, {1} {2} Lat={3}, Lng={4}",
                 point.CardId.ToString(),
@@ -61,6 +62,11 @@ namespace Core.Searchers
                 point.Coordinate != null ? point.Coordinate.Lng : "none",
                 point.PStatus.ToString()
             ));
+
+            if (point.Coordinate != null)
+            {
+                point.SetSearchEngineStatus("OK");
+            }
 
             if (point.CardId > 0)
             {
