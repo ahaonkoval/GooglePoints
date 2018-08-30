@@ -42,7 +42,7 @@ function initialize() {
 
         var greenIcon = L.icon({
             iconUrl: 'img/Epicentrk.svg.png',
-            iconSize: [40, 40] // size of the icon
+            iconSize: [20, 20] // size of the icon
         });
 
         var market_marker = new L.Marker(

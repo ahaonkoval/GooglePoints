@@ -34,8 +34,8 @@ namespace ServiceDebuggerHelper
             this.stopButton = new System.Windows.Forms.Button();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.txtConsole = new System.Windows.Forms.TextBox();
             this.lblConsole = new System.Windows.Forms.Label();
+            this.lstLogger = new System.Windows.Forms.ListBox();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -83,10 +83,10 @@ namespace ServiceDebuggerHelper
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel1});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 386);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 396);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Padding = new System.Windows.Forms.Padding(1, 0, 16, 0);
-            this.statusStrip1.Size = new System.Drawing.Size(399, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(704, 22);
             this.statusStrip1.TabIndex = 1;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -96,36 +96,39 @@ namespace ServiceDebuggerHelper
             this.toolStripStatusLabel1.Size = new System.Drawing.Size(51, 17);
             this.toolStripStatusLabel1.Text = "Stopped";
             // 
-            // txtConsole
-            // 
-            this.txtConsole.Location = new System.Drawing.Point(14, 62);
-            this.txtConsole.Multiline = true;
-            this.txtConsole.Name = "txtConsole";
-            this.txtConsole.Size = new System.Drawing.Size(370, 319);
-            this.txtConsole.TabIndex = 2;
-            // 
             // lblConsole
             // 
             this.lblConsole.AutoSize = true;
-            this.lblConsole.Location = new System.Drawing.Point(15, 45);
+            this.lblConsole.Location = new System.Drawing.Point(16, 41);
             this.lblConsole.Name = "lblConsole";
-            this.lblConsole.Size = new System.Drawing.Size(44, 14);
+            this.lblConsole.Size = new System.Drawing.Size(45, 15);
             this.lblConsole.TabIndex = 3;
             this.lblConsole.Text = "Вывод";
             // 
+            // lstLogger
+            // 
+            this.lstLogger.Font = new System.Drawing.Font("Calibri Light", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.lstLogger.FormattingEnabled = true;
+            this.lstLogger.ItemHeight = 14;
+            this.lstLogger.Location = new System.Drawing.Point(14, 61);
+            this.lstLogger.Name = "lstLogger";
+            this.lstLogger.ScrollAlwaysVisible = true;
+            this.lstLogger.Size = new System.Drawing.Size(685, 326);
+            this.lstLogger.TabIndex = 4;
+            // 
             // ServiceRunner
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(399, 408);
+            this.ClientSize = new System.Drawing.Size(704, 418);
+            this.Controls.Add(this.lstLogger);
             this.Controls.Add(this.lblConsole);
-            this.Controls.Add(this.txtConsole);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.stopButton);
             this.Controls.Add(this.continueButton);
             this.Controls.Add(this.pauseButton);
             this.Controls.Add(this.startButton);
-            this.Font = new System.Drawing.Font("Liberation Sans", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.Name = "ServiceRunner";
             this.Text = "ServiceControler";
             this.statusStrip1.ResumeLayout(false);
@@ -144,6 +147,6 @@ namespace ServiceDebuggerHelper
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.Label lblConsole;
-        public System.Windows.Forms.TextBox txtConsole;
+        private System.Windows.Forms.ListBox lstLogger;
     }
 }

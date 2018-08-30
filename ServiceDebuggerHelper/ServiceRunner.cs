@@ -17,6 +17,16 @@ namespace ServiceDebuggerHelper
             Show();
         }
 
+        public void SetLog(string item)
+        {
+            lstLogger.Items.Add(item);
+        }
+
+        public void ClearLogger()
+        {
+            lstLogger.Items.Clear();
+        }
+
         private void startButton_Click(object sender, EventArgs e)
         {
             _theService.Start(new string[] { });

@@ -262,7 +262,7 @@ osmap = {
                     var icon = L.icon({
                         iconUrl: 'img/epicentrk_market.png',
                         //shadowUrl: 'img/marker-shadow.png',
-                        iconSize: [55, 65]
+                        iconSize: [40, 45]
                     });
                     var marker = new L.Marker(
                         market_location,
@@ -454,7 +454,7 @@ osmap = {
                     var myIcon = L.icon({
                         iconUrl: 'img/viber.png',
                         iconRetinaUrl: 'img/viber.png',
-                        iconSize: [15, 15],
+                        iconSize: [10, 10],
                     });
                     var point = new L.marker(
                         new L.LatLng(item.lat, item.lng),

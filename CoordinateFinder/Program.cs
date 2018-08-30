@@ -16,16 +16,16 @@ namespace GeoCoordinateSearcher
         /// </summary>
         static void Main()
         {
-#if DEBUG
+            #if DEBUG
             Application.Run(new ServiceRunner(new ServiceFinder()));
-#else
+            #else
             ServiceBase[] ServicesToRun;
             ServicesToRun = new ServiceBase[]
             {
                 new ServiceFinder()
             };
             ServiceBase.Run(ServicesToRun);
-#endif
+            #endif
         }
     }
 }
