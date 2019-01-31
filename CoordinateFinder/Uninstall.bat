@@ -1,2 +1,2 @@
 ﻿
-InstallUtil.exe CoordinateFinder.exe -u
+InstallUtil.exe GeoCoordinateSearcher.exe -u

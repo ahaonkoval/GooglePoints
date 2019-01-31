@@ -9,7 +9,10 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using System.Xml.Serialization;
+using Nominatim.API.Geocoders;
+using Nominatim.API.Models;
 
 namespace Core.Searchers
 {
@@ -38,61 +41,87 @@ namespace Core.Searchers
 
         public ProcessPoint IdentifyCoordinatePoint(ProcessPoint point)
         {
-
-            WebClientExtended client = new WebClientExtended();
-
-            if (Convert.ToBoolean(ConfigurationManager.AppSettings["isProxy"]))
+            try
             {
-                string Host = ConfigurationManager.AppSettings["ProxyHost"];
-                int Port = Convert.ToInt32(ConfigurationManager.AppSettings["ProxyPort"]);
-                System.Net.WebProxy wp = new System.Net.WebProxy(Host, Port);
-                client.Proxy = wp;
-            }
+                 var x = new ForwardGeocoder();
 
-            string ep = string.Format(ConfigurationManager.AppSettings["OSMApiPath"]);
-            string url = string.Format("{0}{1}&format=xml&addressdetails=1", ep, point.SourceAddress);
+                var r = x.Geocode(new ForwardGeocodeRequest
+                {
+                    queryString = point.addressDb.Get(),//"1600 Pennsylvania Avenue, Washington, DC",
 
-            string st = System.Text.Encoding.UTF8.GetString(client.DownloadData(url));
+                    BreakdownAddressElements = true,
+                    ShowExtraTags = true,
+                    ShowAlternativeNames = true,
+                    ShowGeoJSON = true
+                });
 
-            XmlSerializer serializer = new XmlSerializer(typeof(Searchresults));
+                r.Wait();
 
-            using (TextReader tr = new StringReader(st))
+                return point;
+                //WebClientExtended client = new WebClientExtended();
+
+                //if (Convert.ToBoolean(ConfigurationManager.AppSettings["isProxy"]))
+                //{
+                //    string Host = ConfigurationManager.AppSettings["ProxyHost"];
+                //    int Port = Convert.ToInt32(ConfigurationManager.AppSettings["ProxyPort"]);
+                //    System.Net.WebProxy wp = new System.Net.WebProxy(Host, Port);
+                //    client.Proxy = wp;
+                //}
+
+                //string ep = string.Format(ConfigurationManager.AppSettings["OSMApiPath"]);
+                ////string url = string.Format("{0}{1}&format=xml&addressdetails=1", ep, System.Convert.ToBase64String(
+                ////    System.Text.Encoding.Default.GetBytes(point.SourceAddress)
+                ////    ));
+
+                //string url = string.Format("{0}{1}&format=xml&addressdetails=1", ep, HttpUtility.UrlEncode(point.SourceAddress));
+
+                ////url = HttpUtility.UrlEncode(url);
+
+                //string st = System.Text.Encoding.UTF8.GetString(client.DownloadData(url));
+
+                //XmlSerializer serializer = new XmlSerializer(typeof(Searchresults));
+
+                //using (TextReader tr = new StringReader(st))
+                //{
+                //    Searchresults result = (Searchresults)serializer.Deserialize(tr);
+                //    if (result.Place != null)
+                //    {
+                //        point.Coordinate = new Coordinate(result.Place.Lat, result.Place.Lon);
+                //        point.FormattedAddress = result.Place.Display_name;
+                //        point.SetSearchEngineStatus("OK");
+                //        point.Conteiner = (object)result.Place;
+                //        point.SearchEngine = SearchEngine.Osm;
+                //        //point.PStatus = ProcessStatus.;
+                //    }
+                //    else
+                //    {
+                //        point.SetSearchEngineStatus("ZERO_RESULTS");
+                //    }
+
+                //    //XmlSerializer smr = new XmlSerializer(typeof(Searchresults));
+                //    //using (StringWriter tw = new StringWriter())
+                //    //{
+                //    //    smr.Serialize(tw, result);
+                //    //    point.Xml = tw.ToString();
+                //    //}
+
+                //    _logger.Info(string.Format("{0} SearchEngineStatus:{5}, {1} {2} Lat={3}, Lng={4}",
+                //        point.CardId.ToString(),
+                //        "Point Get OSM:",
+                //        point.FormattedAddress,
+                //        point.Coordinate != null ? point.Coordinate.Lat : "none",
+                //        point.Coordinate != null ? point.Coordinate.Lng : "none",
+                //        point.PStatus.ToString()
+                //    ));
+
+                //    point.Save(hdb);
+
+                //    _logger.Info(string.Format("{0} {1}", point.CardId.ToString(), "Point Set Data in DB"));
+
+                //    return point;
+                //}
+            } catch (Exception ex)
             {
-                Searchresults result = (Searchresults)serializer.Deserialize(tr);
-                if (result.Place != null)
-                {
-                    point.Coordinate = new Coordinate(result.Place.Lat, result.Place.Lon);
-                    point.FormattedAddress = result.Place.Display_name;
-                    point.SetSearchEngineStatus("OK");
-                    point.Conteiner = (object)result.Place;
-                    point.SearchEngine = SearchEngine.Osm;
-                    //point.PStatus = ProcessStatus.;
-                }
-                else
-                {
-                    point.SetSearchEngineStatus("ZERO_RESULTS");
-                }
-
-                XmlSerializer smr = new XmlSerializer(typeof(Searchresults));
-                using (StringWriter tw = new StringWriter())
-                {
-                    smr.Serialize(tw, result);
-                    point.Xml = tw.ToString();
-                }
-
-                _logger.Info(string.Format("{0} SearchEngineStatus:{5}, {1} {2} Lat={3}, Lng={4}",
-                    point.CardId.ToString(),
-                    "Point Get OSM:",
-                    point.FormattedAddress,
-                    point.Coordinate != null ? point.Coordinate.Lat : "none",
-                    point.Coordinate != null ? point.Coordinate.Lng : "none",
-                    point.PStatus.ToString()
-                ));
-
-                point.Save(hdb);
-
-                _logger.Info(string.Format("{0} {1}", point.CardId.ToString(), "Point Set Data in DB"));
-
                 return point;
             }
         }

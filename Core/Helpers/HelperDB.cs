@@ -23,6 +23,7 @@ namespace Core.Helpers
         /// <returns></returns>
         public ProcessPoint GetEpicentrKPointForGeocoding()
         {
+
             //TODO пишемо запит в БД через храниму процедуру gpo.get_unchecked_address
             //PointMap Point = new PointMap();
 
@@ -38,7 +39,16 @@ namespace Core.Helpers
                         CardId = re.card_id.Value,
                         CrmCustomerId = re.crm_customer_id.Value,
                         SourceAddress = re.adress,
-                        Type = PointType.CustomerEpicentrK
+                        Type = PointType.CustomerEpicentrK,
+                        addressDb = new AddressDb
+                        {
+                            City = re.city,
+                            District = re.district,
+                            HouseNumber = re.house_number,
+                            Region = re.region,
+                            Street = re.street
+                        }      
+
                     };
                 }
                 else return null;

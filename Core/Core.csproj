@@ -44,6 +44,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\System.Spatial.5.7.0\lib\net40\System.Spatial.dll</HintPath>
     </Reference>
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -51,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ObjectSerializer\HereResponse.cs" />
     <Compile Include="Objects\WebClientExtended.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -78,6 +80,10 @@
     <ProjectReference Include="..\CoreData\CoreData.csproj">
       <Project>{af4e6d2d-16b0-433e-bff8-55f35dddc2c7}</Project>
       <Name>CoreData</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Nominatim.API\Nominatim.API.csproj">
+      <Project>{7ac4c27c-2d7a-4ee9-bd4c-7f5101ef2ebc}</Project>
+      <Name>Nominatim.API</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

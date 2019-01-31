@@ -35,8 +35,8 @@ namespace CoreData
 
                 //var a = 
                 var l = db.GoogleRequestLimit.Where(
-                        w => w.DateRequest.Equals(DateTime.Now.Date)//ToString("yyyy-MM-ddd")
-                    ).FirstOrDefault();
+                        w => w.DateRequest.Value == DateTime.Now.Date //.ToString("yyyy-MM-ddd")
+                    ).FirstOrDefault();                
 
                 if (l == null)
                 {

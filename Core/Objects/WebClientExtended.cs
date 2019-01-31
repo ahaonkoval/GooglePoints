@@ -53,16 +53,22 @@ namespace Core.Objects
 
         protected override WebResponse GetWebResponse(WebRequest request)
         {
-            WebResponse response = base.GetWebResponse(request);
-
-            if (!string.IsNullOrEmpty(response.Headers["Location"]))
+            try
             {
-                request = GetWebRequest(new Uri(response.Headers["Location"]));
-                request.ContentLength = 0;
-                response = GetWebResponse(request);
-            }
+                WebResponse response = base.GetWebResponse(request);
+                if (!string.IsNullOrEmpty(response.Headers["Location"]))
+                {
+                    request = GetWebRequest(new Uri(response.Headers["Location"]));
+                    request.ContentLength = 0;
+                    response = GetWebResponse(request);
+                }
 
-            return response;
+                return response;
+            }
+            catch
+            {
+                return null;
+            }
         }
         #endregion
     }

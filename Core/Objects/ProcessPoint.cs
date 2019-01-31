@@ -62,6 +62,8 @@ namespace Core.Objects
         /// </summary>
         public string Error { get; set; }
 
+        public AddressDb addressDb { get; set; }
+
         public Object Conteiner { get; set; }
         public ProcessPoint() {
             this.Coordinate = null;
@@ -110,6 +112,31 @@ namespace Core.Objects
         {
             this.Lat = lat;
             this.Lng = lng;
+        }
+    }
+
+    public class AddressDb
+    {
+        public string Region { get; set; }
+        public string District { get; set; }
+        public string City { get; set; }
+        public string Street { get; set; }
+        public string HouseNumber { get; set; }
+
+        public AddressDb()
+        {
+
+        }
+
+        public string Get()
+        {
+            return string.Format("{0} {1} {2} {3} {4}",
+                this.Region == null ? string.Empty : this.Region.Trim(),
+                this.District == null ? string.Empty : this.District.Trim(), 
+                this.City.Trim(), 
+                this.Street.Trim(), 
+                this.HouseNumber.Trim()
+                );
         }
     }
 

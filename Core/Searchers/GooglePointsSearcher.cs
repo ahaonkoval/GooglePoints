@@ -40,16 +40,11 @@ namespace Core.Searchers
         }
 
         public ProcessPoint IdentifyCoordinatePoint(ProcessPoint point)
-        {
-            if (GetRemainingAttemptsCount() <= 0) {
-                point.PStatus = ProcessStatus.ATTEMTS_TO_END;
-                return point;
-            }            
-
-            if (point != null)
-            {
-                _logger.Info(string.Format("{0} {1} {2}", point.CardId.ToString(), "Address Get DB:", point.SourceAddress));         
-            }
+        {          
+            //if (point != null)
+            //{
+            //    _logger.Info(string.Format("{0} {1} {2}", point.CardId.ToString(), "Address Get DB:", point.SourceAddress));         
+            //}
 
             point = hgoogle.GetRequestXmlDocumentPointsByAddress(point);
             point.SearchEngine = SearchEngine.Google;

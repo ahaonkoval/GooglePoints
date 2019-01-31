@@ -293,6 +293,7 @@ namespace CoreData
             using (var db = new DataModels.GeolocationDB())
             {
                 LinqToDB.Data.DataConnection connect = new LinqToDB.Data.DataConnection();
+                connect.CommandTimeout = 100000;
                 GeolocationDBStoredProcedures.PGetUnverifiedAddressResult re =
                     DataModels.GeolocationDBStoredProcedures.PGetUnverifiedAddress(connect).FirstOrDefault();
                 return re;
@@ -328,7 +329,7 @@ namespace CoreData
                     .Set(o => o.CardId, cardId)
                     .Set(o => o.CrmCustomerId, crmCustomersId)
                     .Set(o => o.SearchEngineStatus, searchEngineStatus)
-                    .Set(o => o.Xml, xml.ToString())
+                    //.Set(o => o.Xml, xml.ToString())
                     .Update();
             }
         }
